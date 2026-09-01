@@ -1,11 +1,12 @@
-using System.Text;
 using DeviceTrust.Infrastructure.Auth;
 using DeviceTrust.Infrastructure.Data;
+using DeviceTrust.Infrastructure.Devices;
 using DeviceTrust.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
     {
+        options.MapInboundClaims = false; // <-- add this line: keep "sub" as "sub", don't remap to legacy claim URIs
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -42,10 +44,13 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<PassportIdGenerator>();
+builder.Services.AddScoped<DeviceService>();
 
 var app = builder.Build();
 
