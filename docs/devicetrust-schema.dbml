@@ -1,0 +1,253 @@
+// DeviceTrust — Database Schema
+// Docs: https://dbml.dbdiagram.io/docs
+// Paste this entire file into dbdiagram.io to render the ERD
+
+//////////////////////////////////////
+// ENUMS
+//////////////////////////////////////
+
+Enum user_role {
+  Owner
+  Technician
+  Admin
+}
+
+Enum device_type {
+  Laptop
+  Desktop
+  Smartphone
+  Tablet
+}
+
+Enum transfer_status {
+  Pending
+  Accepted
+  Rejected
+  Cancelled
+  Expired
+}
+
+Enum repair_status {
+  Draft
+  Submitted
+  Verified
+}
+
+Enum record_type {
+  Repair
+  Inspection
+}
+
+Enum part_type {
+  Battery
+  Screen
+  RAM
+  SSD
+  Motherboard
+  CoolingFan
+  Other
+}
+
+Enum attachment_type {
+  BeforePhoto
+  AfterPhoto
+  Invoice
+  InspectionReport
+}
+
+//////////////////////////////////////
+// CORE IDENTITY
+//////////////////////////////////////
+
+Table ApplicationUser {
+  Id int [pk, increment]
+  FullName varchar(100) [not null]
+  Email varchar(150) [unique, not null]
+  PasswordHash varchar(255) [not null]
+  Role user_role [not null]
+  CreatedAt datetime [not null, default: `now()`]
+
+  Note: 'Identity table — authentication only. Role-specific data lives in TechnicianProfile.'
+}
+
+//////////////////////////////////////
+// DEVICE & PASSPORT
+//////////////////////////////////////
+
+Table Device {
+  Id int [pk, increment]
+  PublicPassportId varchar(20) [unique, not null, note: 'e.g. DVT-A83K92 — never expose internal Id publicly']
+  DeviceType device_type [not null]
+  Brand varchar(50) [not null]
+  Model varchar(50) [not null]
+  SerialNumber varchar(50) [not null]
+  ManufactureYear int [null]
+  RegisteredAt datetime [not null, default: `now()`]
+
+  indexes {
+    SerialNumber [name: 'IX_Device_SerialNumber']
+  }
+
+  Note: 'Root entity — everything else hangs off Device.'
+}
+
+//////////////////////////////////////
+// OWNERSHIP
+//////////////////////////////////////
+
+Table Ownership {
+  Id int [pk, increment]
+  DeviceId int [not null]
+  OwnerId int [not null]
+  StartDate datetime [not null]
+  EndDate datetime [null, note: 'NULL = this is the current owner']
+  CreatedAt datetime [not null, default: `now()`]
+
+  Note: '''
+  Business rule: only one row per Device may have EndDate IS NULL.
+  Enforced via SQL Server filtered unique index (not expressible in DBML):
+  CREATE UNIQUE INDEX UX_Ownership_OneCurrentPerDevice
+  ON Ownership (DeviceId) WHERE EndDate IS NULL;
+  '''
+}
+
+Table OwnershipTransfer {
+  Id int [pk, increment]
+  DeviceId int [not null]
+  FromUserId int [not null, note: 'current owner, initiator']
+  ToUserId int [not null, note: 'buyer / recipient']
+  Status transfer_status [not null, default: 'Pending']
+  RequestedAt datetime [not null, default: `now()`]
+  RespondedAt datetime [null, note: 'NULL until Accepted/Rejected/Cancelled']
+  ExpiresAt datetime [not null, note: 'e.g. RequestedAt + 7 days']
+
+  Note: '''
+  Business rule: only one Pending transfer per Device.
+  Enforced via SQL Server filtered unique index (not expressible in DBML):
+  CREATE UNIQUE INDEX UX_Transfer_OnePendingPerDevice
+  ON OwnershipTransfer (DeviceId) WHERE Status = 0; -- Pending
+
+  Accept workflow (DeviceId, FromUserId, ToUserId) must run inside
+  a single DB transaction: close old Ownership + create new Ownership +
+  update Status, all-or-nothing.
+  '''
+}
+
+//////////////////////////////////////
+// REPAIR CENTER & TECHNICIAN
+//////////////////////////////////////
+
+Table RepairCenter {
+  Id int [pk, increment]
+  Name varchar(100) [not null]
+  Address varchar(200) [null]
+  IsApproved bool [not null, default: false]
+  CreatedAt datetime [not null, default: `now()`]
+}
+
+Table TechnicianProfile {
+  Id int [pk, increment]
+  UserId int [unique, not null, note: '1-to-1 with ApplicationUser']
+  RepairCenterId int [not null]
+  IsApproved bool [not null, default: false]
+  CreatedAt datetime [not null, default: `now()`]
+
+  Note: '''
+  Trusted-record rule: a repair only counts as verifiable if
+  RepairCenter.IsApproved == true AND TechnicianProfile.IsApproved == true.
+  '''
+}
+
+//////////////////////////////////////
+// REPAIR RECORD & RELATED
+//////////////////////////////////////
+
+Table RepairRecord {
+  Id int [pk, increment]
+  DeviceId int [not null]
+  RepairCenterId int [not null]
+  TechnicianId int [not null]
+  RecordType record_type [not null, default: 'Repair']
+  ProblemDescription text [null]
+  Diagnosis text [null]
+  ActionTaken text [null]
+  RepairDate datetime [not null]
+  Status repair_status [not null, default: 'Draft']
+  WarrantyUntil datetime [null]
+  CorrectsRecordId int [null, note: 'self-reference — points to the record this one corrects']
+  CreatedAt datetime [not null, default: `now()`]
+  SubmittedAt datetime [null]
+  VerifiedAt datetime [null]
+
+  Note: '''
+  Once Status = Verified: Edit/Delete disabled at application layer
+  (service throws before SaveChanges). Corrections are new rows with
+  CorrectsRecordId set, never overwrite the original — history is append-only.
+  '''
+}
+
+Table RepairPart {
+  Id int [pk, increment]
+  RepairRecordId int [not null]
+  PartType part_type [not null]
+  PartName varchar(100) [not null]
+  OldPartSerial varchar(50) [null]
+  NewPartSerial varchar(50) [null]
+  IsOriginal bool [not null, default: true]
+  Notes text [null]
+}
+
+Table Attachment {
+  Id int [pk, increment]
+  RepairRecordId int [not null]
+  FilePath varchar(255) [not null]
+  AttachmentType attachment_type [not null]
+  UploadedAt datetime [not null, default: `now()`]
+}
+
+//////////////////////////////////////
+// AUDIT LOG
+//////////////////////////////////////
+
+Table AuditLog {
+  Id int [pk, increment]
+  UserId int [null, note: 'who performed the action; NULL = system action']
+  Action varchar(100) [not null, note: 'e.g. RepairVerified, TransferAccepted']
+  EntityType varchar(50) [not null, note: 'e.g. RepairRecord, OwnershipTransfer']
+  EntityId int [not null, note: 'NOT a real FK — polymorphic reference, see note']
+  Details text [null, note: 'optional JSON/text — old/new values']
+  CreatedAt datetime [not null, default: `now()`]
+
+  Note: '''
+  Deliberate tradeoff: EntityId + EntityType is a polymorphic reference,
+  not a strict FK — the DB cannot verify EntityId exists in the target table
+  because the target table depends on EntityType. Accepted for log/audit
+  tables specifically; all core business entities keep real FKs.
+  '''
+}
+
+//////////////////////////////////////
+// RELATIONSHIPS
+//////////////////////////////////////
+
+Ref: Ownership.DeviceId > Device.Id
+Ref: Ownership.OwnerId > ApplicationUser.Id
+
+Ref: OwnershipTransfer.DeviceId > Device.Id
+Ref: OwnershipTransfer.FromUserId > ApplicationUser.Id
+Ref: OwnershipTransfer.ToUserId > ApplicationUser.Id
+
+Ref: TechnicianProfile.UserId - ApplicationUser.Id
+Ref: TechnicianProfile.RepairCenterId > RepairCenter.Id
+
+Ref: RepairRecord.DeviceId > Device.Id
+Ref: RepairRecord.RepairCenterId > RepairCenter.Id
+Ref: RepairRecord.TechnicianId > TechnicianProfile.Id
+Ref: RepairRecord.CorrectsRecordId >? RepairRecord.Id
+
+Ref: RepairPart.RepairRecordId > RepairRecord.Id
+Ref: Attachment.RepairRecordId > RepairRecord.Id
+
+// AuditLog.UserId intentionally left unlinked in the diagram view below,
+// but add this Ref if you want the visual arrow:
+Ref: AuditLog.UserId >? ApplicationUser.Id
