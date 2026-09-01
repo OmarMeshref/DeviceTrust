@@ -2,7 +2,7 @@ using DeviceTrust.Infrastructure.Data;
 using DeviceTrust.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using DeviceTrust.Infrastructure.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

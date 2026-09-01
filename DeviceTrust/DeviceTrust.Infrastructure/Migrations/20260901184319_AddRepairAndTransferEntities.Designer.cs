@@ -4,6 +4,7 @@ using DeviceTrust.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeviceTrust.Infrastructure.Migrations
 {
     [DbContext(typeof(DeviceTrustDbContext))]
-    partial class DeviceTrustDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260901184319_AddRepairAndTransferEntities")]
+    partial class AddRepairAndTransferEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
