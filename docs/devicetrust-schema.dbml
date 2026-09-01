@@ -148,7 +148,7 @@ Table RepairCenter {
 Table TechnicianProfile {
   Id int [pk, increment]
   UserId int [unique, not null, note: '1-to-1 with ApplicationUser']
-  RepairCenterId int [not null]
+  RepairCenterId int [null]
   IsApproved bool [not null, default: false]
   CreatedAt datetime [not null, default: `now()`]
 
