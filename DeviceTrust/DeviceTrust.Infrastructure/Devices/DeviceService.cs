@@ -72,4 +72,10 @@ public class DeviceService
 
         return (device, repairCount);
     }
+
+    public async Task<Device?> GetDeviceByPublicIdAsync(string publicPassportId)
+    {
+        return await _context.Devices
+            .FirstOrDefaultAsync(d => d.PublicPassportId == publicPassportId);
+    }
 }
