@@ -2,6 +2,7 @@ using DeviceTrust.Infrastructure.Auth;
 using DeviceTrust.Infrastructure.Data;
 using DeviceTrust.Infrastructure.Devices;
 using DeviceTrust.Infrastructure.Identity;
+using DeviceTrust.Infrastructure.Transfers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddScoped<TransferService>();
 
 builder.Services.AddAuthentication(options =>
 {
