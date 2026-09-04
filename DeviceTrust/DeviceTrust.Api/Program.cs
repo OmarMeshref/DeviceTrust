@@ -2,6 +2,7 @@ using DeviceTrust.Infrastructure.Auth;
 using DeviceTrust.Infrastructure.Data;
 using DeviceTrust.Infrastructure.Devices;
 using DeviceTrust.Infrastructure.Identity;
+using DeviceTrust.Infrastructure.RepairCenters;
 using DeviceTrust.Infrastructure.Transfers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,8 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<TransferService>();
+
+builder.Services.AddScoped<RepairCenterService>();
 
 builder.Services.AddAuthentication(options =>
 {
