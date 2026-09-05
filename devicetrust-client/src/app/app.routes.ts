@@ -5,8 +5,10 @@ import { RegisterComponent } from './features/auth/register/register';
 import { DeviceListComponent } from './features/devices/device-list/device-list';
 import { DeviceCreateComponent } from './features/devices/device-create/device-create';
 import { DeviceDetailComponent } from './features/devices/device-detail/device-detail';
+import { PassportViewComponent } from './features/passport/passport-view/passport-view';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -29,5 +31,9 @@ export const routes: Routes = [
     component: DeviceDetailComponent,
     canActivate: [authGuard],
     data: { role: 'Owner' }
+  },
+  { 
+    path: 'passport/:publicId', 
+    component: PassportViewComponent 
   }
 ];
