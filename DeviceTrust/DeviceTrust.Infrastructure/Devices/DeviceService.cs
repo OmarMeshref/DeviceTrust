@@ -91,4 +91,10 @@ public class DeviceService
 
         return (totalRepairs, verifiedTimeline.Count, verifiedTimeline);
     }
+
+    public async Task<Device?> GetDeviceByPublicIdForTechnicianAsync(string publicPassportId)
+    {
+        return await _context.Devices
+            .FirstOrDefaultAsync(d => d.PublicPassportId == publicPassportId);
+    }
 }
