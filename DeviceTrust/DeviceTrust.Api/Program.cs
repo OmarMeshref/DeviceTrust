@@ -13,6 +13,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddDbContext<DeviceTrustDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DeviceTrustDb")));
 
@@ -73,6 +83,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAngularDev"); // must come after routing setup, before Authentication/Authorization
 
 app.UseAuthentication();
 app.UseAuthorization();
