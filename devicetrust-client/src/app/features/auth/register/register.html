@@ -1,0 +1,41 @@
+<div class="auth-page">
+  <h1>Create an account</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Full Name
+      <input type="text" formControlName="fullName" />
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" formControlName="password" />
+    </label>
+    @if (form.get('password')?.touched && form.get('password')?.invalid) {
+      <p class="field-error">Password must be at least 8 characters.</p>
+    }
+
+    <label>
+      I am registering as
+      <select formControlName="role">
+        <option value="Owner">Device Owner</option>
+        <option value="Technician">Technician</option>
+      </select>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="form-error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="form.invalid || isSubmitting()">
+      {{ isSubmitting() ? 'Creating account...' : 'Register' }}
+    </button>
+  </form>
+
+  <p>Already have an account? <a routerLink="/login">Login here</a></p>
+</div>

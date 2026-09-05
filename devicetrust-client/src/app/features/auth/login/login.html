@@ -1,0 +1,29 @@
+<div class="auth-page">
+  <h1>Login</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Email
+      <input type="email" formControlName="email" />
+    </label>
+
+    @if (form.get('email')?.touched && form.get('email')?.invalid) {
+      <p class="field-error">A valid email is required.</p>
+    }
+
+    <label>
+      Password
+      <input type="password" formControlName="password" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="form-error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="form.invalid || isSubmitting()">
+      {{ isSubmitting() ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
+
+  <p>No account? <a routerLink="/register">Register here</a></p>
+</div>
