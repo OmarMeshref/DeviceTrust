@@ -1,0 +1,22 @@
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading device...</p>
+  } @else if (notFound()) {
+    <p>Device not found.</p>
+    <a routerLink="/owner/devices">Back to My Devices</a>
+  } @else if (device(); as d) {
+    <a routerLink="/owner/devices">&larr; Back</a>
+    <h1>{{ d.brand }} {{ d.model }}</h1>
+    <p><strong>Passport ID:</strong> {{ d.publicPassportId }}</p>
+    <p><strong>Serial Number:</strong> {{ d.serialNumber }}</p>
+    <p><strong>Registered:</strong> {{ d.registeredAt | date }}</p>
+    @if (d.purchaseDate) {
+      <p><strong>Purchase Date:</strong> {{ d.purchaseDate | date }}</p>
+    }
+    <p><strong>Repairs Logged:</strong> {{ d.repairCount }}</p>
+
+    <a [routerLink]="['/passport', d.publicPassportId]" target="_blank">
+      View Public Passport &rarr;
+    </a>
+  }
+</div>
