@@ -1,0 +1,24 @@
+<div class="page">
+  <div class="page-header">
+    <h1>My Devices</h1>
+    <a routerLink="/owner/devices/new" class="btn-primary">+ Register Device</a>
+  </div>
+
+  @if (isLoading()) {
+    <p>Loading devices...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (devices().length === 0) {
+    <p>You haven't registered any devices yet.</p>
+  } @else {
+    <div class="device-grid">
+      @for (device of devices(); track device.id) {
+        <a [routerLink]="['/owner/devices', device.id]" class="device-card">
+          <h3>{{ device.brand }} {{ device.model }}</h3>
+          <p>{{ device.publicPassportId }}</p>
+          <p>Registered {{ device.registeredAt | date }}</p>
+        </a>
+      }
+    </div>
+  }
+</div>

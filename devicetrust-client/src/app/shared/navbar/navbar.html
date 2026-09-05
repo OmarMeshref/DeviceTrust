@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <a routerLink="/" class="brand">DeviceTrust</a>
+
+  @if (authService.isLoggedIn()) {
+    <div class="nav-links">
+      <span>{{ authService.getRole() }}</span>
+      <button (click)="onLogout()">Logout</button>
+    </div>
+  } @else {
+    <div class="nav-links">
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    </div>
+  }
+</nav>
