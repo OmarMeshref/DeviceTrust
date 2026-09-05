@@ -1,4 +1,5 @@
 ﻿using DeviceTrust.Domain.Entities;
+using DeviceTrust.Domain.Enums;
 using DeviceTrust.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -77,5 +78,17 @@ public class DeviceService
     {
         return await _context.Devices
             .FirstOrDefaultAsync(d => d.PublicPassportId == publicPassportId);
+    }
+
+    public async Task<(int totalRepairs, int verifiedRepairs, List<RepairRecord> verifiedTimeline)> GetPassportRepairDataAsync(int deviceId)
+    {
+        var totalRepairs = await _context.RepairRecords.CountAsync(r => r.DeviceId == deviceId);
+
+        var verifiedTimeline = await _context.RepairRecords
+            .Where(r => r.DeviceId == deviceId && r.Status == RepairStatus.Verified)
+            .OrderByDescending(r => r.RepairDate)
+            .ToListAsync();
+
+        return (totalRepairs, verifiedTimeline.Count, verifiedTimeline);
     }
 }

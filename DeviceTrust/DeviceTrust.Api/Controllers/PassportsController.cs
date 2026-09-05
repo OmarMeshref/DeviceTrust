@@ -22,6 +22,8 @@ public class PassportsController : ControllerBase
         var device = await _deviceService.GetDeviceByPublicIdAsync(publicId);
         if (device is null) return NotFound();
 
+        var (totalRepairs, verifiedRepairs, timeline) = await _deviceService.GetPassportRepairDataAsync(device.Id);
+
         var dto = new PublicDevicePassportDto
         {
             PublicPassportId = device.PublicPassportId,
@@ -30,8 +32,13 @@ public class PassportsController : ControllerBase
             Model = device.Model,
             MaskedSerialNumber = SerialMasker.Mask(device.SerialNumber),
             RegisteredAt = device.RegisteredAt,
-            TotalRepairCount = 0,
-            VerifiedRepairCount = 0
+            TotalRepairCount = totalRepairs,
+            VerifiedRepairCount = verifiedRepairs,
+            RepairTimeline = timeline.Select(r => new PublicRepairTimelineItemDto
+            {
+                RepairDate = r.RepairDate,
+                ActionTaken = r.ActionTaken
+            }).ToList()
         };
 
         return Ok(dto);
