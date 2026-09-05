@@ -1,0 +1,35 @@
+<p>transfer-list works!</p>
+<!-- src/app/features/transfers/transfer-list/transfer-list.html -->
+<div class="page">
+  <h1>Pending Transfer Requests</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (transfers().length === 0) {
+    <p>You have no pending transfer requests.</p>
+  } @else {
+    @for (t of transfers(); track t.id) {
+      <div class="transfer-card">
+        <h3>{{ t.deviceBrand }} {{ t.deviceModel }}</h3>
+        <p>Passport ID: {{ t.devicePublicPassportId }}</p>
+        <p>Requested: {{ t.createdAt | date }}</p>
+        <p>Expires: {{ t.expiresAt | date }}</p>
+
+        <div class="transfer-actions">
+          <button
+            (click)="onAccept(t.id)"
+            [disabled]="actioningId() === t.id">
+            Accept
+          </button>
+          <button
+            (click)="onReject(t.id)"
+            [disabled]="actioningId() === t.id">
+            Reject
+          </button>
+        </div>
+      </div>
+    }
+  }
+</div>
