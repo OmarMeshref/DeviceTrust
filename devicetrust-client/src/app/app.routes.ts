@@ -9,6 +9,7 @@ import { TransferListComponent } from './features/transfers/transfer-list/transf
 import { TechnicianDashboardComponent } from './features/repairs/technician-dashboard/technician-dashboard';
 import { RepairCreateComponent } from './features/repairs/repair-create/repair-create';
 import { RepairDetailComponent } from './features/repairs/repair-detail/repair-detail';
+import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
@@ -60,5 +61,11 @@ export const routes: Routes = [
     component: RepairDetailComponent,
     canActivate: [authGuard],
     data: { role: 'Technician' }
+  },
+  {
+    path: 'admin/dashboard',
+    component: AdminDashboardComponent,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
   }
 ];

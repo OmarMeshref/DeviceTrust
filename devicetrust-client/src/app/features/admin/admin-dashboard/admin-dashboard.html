@@ -1,0 +1,112 @@
+<div class="page">
+  <h1>Admin Dashboard</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else {
+    @if (actionError()) {
+      <p class="form-error">{{ actionError() }}</p>
+    }
+
+    <section>
+      <div class="section-header">
+        <h2>Repair Centers</h2>
+        @if (!showCenterForm()) {
+          <button (click)="showCenterForm.set(true)">+ New Repair Center</button>
+        }
+      </div>
+
+      @if (showCenterForm()) {
+        <form [formGroup]="centerForm" (ngSubmit)="onCreateCenter()">
+          <label>Name <input type="text" formControlName="name" /></label>
+          <label>Address <input type="text" formControlName="address" /></label>
+          @if (centerError()) { <p class="form-error">{{ centerError() }}</p> }
+          <div class="form-actions">
+            <button type="button" (click)="showCenterForm.set(false)">Cancel</button>
+            <button type="submit" [disabled]="centerForm.invalid || centerSubmitting()">
+              {{ centerSubmitting() ? 'Creating...' : 'Create' }}
+            </button>
+          </div>
+        </form>
+      }
+
+      @if (centers().length === 0) {
+        <p>No repair centers yet.</p>
+      } @else {
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Address</th><th>Technicians</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (c of centers(); track c.id) {
+              <tr>
+                <td>{{ c.name }}</td>
+                <td>{{ c.address }}</td>
+                <td>{{ c.technicianCount }}</td>
+                <td>
+                  <span [class.badge-approved]="c.isApproved" [class.badge-pending]="!c.isApproved">
+                    {{ c.isApproved ? 'Approved' : 'Pending' }}
+                  </span>
+                </td>
+                <td>
+                  @if (!c.isApproved) {
+                    <button (click)="onApproveCenter(c.id)">Approve</button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+
+    <section>
+      <h2>Technicians</h2>
+
+      @if (technicians().length === 0) {
+        <p>No technicians registered yet.</p>
+      } @else {
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>Repair Center</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            @for (t of technicians(); track t.id) {
+              <tr>
+                <td>{{ t.fullName }}</td>
+                <td>{{ t.email }}</td>
+                <td>{{ t.repairCenterName || '—' }}</td>
+                <td>
+                  <span [class.badge-approved]="t.isApproved" [class.badge-pending]="!t.isApproved">
+                    {{ t.isApproved ? 'Approved' : 'Pending' }}
+                  </span>
+                </td>
+                <td>
+                  @if (linkingTechnicianId() === t.id) {
+                    <select (change)="selectedCenterId.set($any($event.target).value)">
+                      <option [value]="null" disabled selected>Select center...</option>
+                      @for (c of centers(); track c.id) {
+                        <option [value]="c.id">{{ c.name }}</option>
+                      }
+                    </select>
+                    <button (click)="onConfirmLink(t.id)">Confirm</button>
+                    <button (click)="linkingTechnicianId.set(null)">Cancel</button>
+                  } @else {
+                    @if (!t.repairCenterId) {
+                      <button (click)="onStartLink(t.id)">Link to Center</button>
+                    } @else {
+                      <button (click)="onUnlinkTechnician(t.id)">Unlink</button>
+                    }
+                    @if (t.repairCenterId && !t.isApproved) {
+                      <button (click)="onApproveTechnician(t.id)">Approve</button>
+                    }
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  }
+</div>
