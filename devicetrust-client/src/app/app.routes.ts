@@ -6,6 +6,9 @@ import { DeviceCreateComponent } from './features/devices/device-create/device-c
 import { DeviceDetailComponent } from './features/devices/device-detail/device-detail';
 import { PassportViewComponent } from './features/passport/passport-view/passport-view';
 import { TransferListComponent } from './features/transfers/transfer-list/transfer-list';
+import { TechnicianDashboardComponent } from './features/repairs/technician-dashboard/technician-dashboard';
+import { RepairCreateComponent } from './features/repairs/repair-create/repair-create';
+import { RepairDetailComponent } from './features/repairs/repair-detail/repair-detail';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
@@ -39,5 +42,23 @@ export const routes: Routes = [
   {
     path: 'passport/:publicId',
     component: PassportViewComponent
+  },
+  {
+    path: 'technician/dashboard',
+    component: TechnicianDashboardComponent,
+    canActivate: [authGuard],
+    data: { role: 'Technician' }
+  },
+  {
+    path: 'technician/devices/:deviceId/repairs/new',
+    component: RepairCreateComponent,
+    canActivate: [authGuard],
+    data: { role: 'Technician' }
+  },
+  {
+    path: 'technician/repairs/:id',
+    component: RepairDetailComponent,
+    canActivate: [authGuard],
+    data: { role: 'Technician' }
   }
 ];

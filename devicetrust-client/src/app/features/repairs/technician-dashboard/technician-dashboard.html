@@ -1,0 +1,23 @@
+<div class="page">
+  <h1>Find a Device</h1>
+  <p class="hint">Enter the device's Public Passport ID (found on its QR sticker).</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSearch()">
+    <input type="text" formControlName="publicId" placeholder="e.g. DVT-7F4VHQ" />
+    <button type="submit" [disabled]="form.invalid || isSearching()">
+      {{ isSearching() ? 'Searching...' : 'Find Device' }}
+    </button>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (result(); as d) {
+    <div class="lookup-result">
+      <h3>{{ d.brand }} {{ d.model }}</h3>
+      <p>Passport ID: {{ d.publicPassportId }}</p>
+      <button (click)="onCreateRepair()">Create Repair Record</button>
+    </div>
+  }
+</div>

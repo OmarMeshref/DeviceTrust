@@ -1,0 +1,73 @@
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading repair record...</p>
+  } @else if (repair(); as r) {
+    <h1>Repair #{{ r.id }}</h1>
+
+    <span class="status-badge" [class.status-draft]="r.status === RepairStatus.Draft"
+                               [class.status-verified]="r.status === RepairStatus.Verified">
+      {{ r.status === RepairStatus.Draft ? 'Draft' : 'Verified' }}
+    </span>
+
+    <p><strong>Problem:</strong> {{ r.problemDescription }}</p>
+    <p><strong>Diagnosis:</strong> {{ r.diagnosis }}</p>
+    <p><strong>Action Taken:</strong> {{ r.actionTaken }}</p>
+    <p><strong>Repair Date:</strong> {{ r.repairDate | date }}</p>
+    @if (r.warrantyUntil) {
+      <p><strong>Warranty Until:</strong> {{ r.warrantyUntil | date }}</p>
+    }
+
+    <h2>Parts</h2>
+    @if (r.parts.length === 0) {
+      <p>No parts logged yet.</p>
+    } @else {
+      @for (p of r.parts; track p.id) {
+        <div class="part-row">
+          <strong>{{ p.partName }}</strong> ({{ p.partType }})
+          @if (!p.isOriginal) { <span class="badge-replacement">Replacement</span> }
+          @if (p.oldPartSerial || p.newPartSerial) {
+            <p class="small">Old: {{ p.oldPartSerial || '—' }} → New: {{ p.newPartSerial || '—' }}</p>
+          }
+        </div>
+      }
+    }
+
+    @if (r.status === RepairStatus.Draft) {
+      @if (!showPartForm()) {
+        <button (click)="showPartForm.set(true)">+ Add Part</button>
+      } @else {
+        <form [formGroup]="partForm" (ngSubmit)="onAddPart()">
+          <label>Part Name <input type="text" formControlName="partName" /></label>
+          <label>Part Type <input type="text" formControlName="partType" /></label>
+          <label>Old Serial (optional) <input type="text" formControlName="oldPartSerial" /></label>
+          <label>New Serial (optional) <input type="text" formControlName="newPartSerial" /></label>
+          <label>
+            <input type="checkbox" formControlName="isOriginal" /> Original part (uncheck if replacement)
+          </label>
+          <label>Notes (optional) <textarea formControlName="notes" rows="2"></textarea></label>
+
+          @if (partError()) { <p class="form-error">{{ partError() }}</p> }
+
+          <div class="form-actions">
+            <button type="button" (click)="showPartForm.set(false)">Cancel</button>
+            <button type="submit" [disabled]="partForm.invalid || partSubmitting()">
+              {{ partSubmitting() ? 'Adding...' : 'Add Part' }}
+            </button>
+          </div>
+        </form>
+      }
+
+      <div class="submit-section">
+        @if (submitSuccess()) {
+          <p class="success-message">Repair submitted and verified.</p>
+        } @else {
+          <p class="hint">Once submitted, this record and its parts become permanent and cannot be edited.</p>
+          @if (submitError()) { <p class="form-error">{{ submitError() }}</p> }
+          <button (click)="onSubmitRepair()" [disabled]="submitInProgress()">
+            {{ submitInProgress() ? 'Submitting...' : 'Submit Repair' }}
+          </button>
+        }
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,38 @@
+<div class="page">
+  <h1>New Repair Record</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Problem Description
+      <textarea formControlName="problemDescription" rows="3"></textarea>
+    </label>
+
+    <label>
+      Diagnosis
+      <textarea formControlName="diagnosis" rows="3"></textarea>
+    </label>
+
+    <label>
+      Action Taken
+      <textarea formControlName="actionTaken" rows="3"></textarea>
+    </label>
+
+    <label>
+      Repair Date
+      <input type="date" formControlName="repairDate" />
+    </label>
+
+    <label>
+      Warranty Until (optional)
+      <input type="date" formControlName="warrantyUntil" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="form-error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="form.invalid || isSubmitting()">
+      {{ isSubmitting() ? 'Saving...' : 'Save Draft' }}
+    </button>
+  </form>
+</div>
