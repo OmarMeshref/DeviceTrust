@@ -1,26 +1,63 @@
-<div class="transfer-section">
-  @if (transferSuccess()) {
-    <p class="success-message">{{ transferSuccess() }}</p>
-  } @else if (!showTransferForm()) {
-    <button (click)="showTransferForm.set(true)">Transfer Ownership</button>
-  } @else {
-    <form [formGroup]="transferForm" (ngSubmit)="onStartTransfer()">
-      <label>
-        Buyer's Email
-        <input type="email" formControlName="buyerEmail" placeholder="buyer@example.com" />
-      </label>
-      <p class="hint">The buyer must already have a DeviceTrust account.</p>
+<div class="page">
+  @if (isLoading()) {
+    <p>Loading device...</p>
+  } @else if (notFound()) {
+    <p>Device not found.</p>
+    <a routerLink="/owner/devices">Back to My Devices</a>
+  } @else if (device(); as d) {
+    <a routerLink="/owner/devices">&larr; Back</a>
+    <h1>{{ d.brand }} {{ d.model }}</h1>
+    <p><strong>Passport ID:</strong> {{ d.publicPassportId }}</p>
+    <p><strong>Serial Number:</strong> {{ d.serialNumber }}</p>
+    <p><strong>Registered:</strong> {{ d.registeredAt | date }}</p>
+    @if (d.purchaseDate) {
+      <p><strong>Purchase Date:</strong> {{ d.purchaseDate | date }}</p>
+    }
+    <p><strong>Repairs Logged:</strong> {{ d.repairCount }}</p>
 
-      @if (transferError()) {
-        <p class="form-error">{{ transferError() }}</p>
+    <a [routerLink]="['/passport', d.publicPassportId]" target="_blank">
+      View Public Passport &rarr;
+    </a>
+
+    <div class="qr-section">
+      <h2>Device QR Code</h2>
+      <p class="hint">
+        Print this and attach it to the physical device (e.g. on the chassis or case) —
+        not the screen, so it stays scannable even if the display is damaged.
+      </p>
+      @if (qrDataUrl(); as qr) {
+        <img [src]="qr" alt="QR code linking to this device's public passport" width="220" height="220" />
+        <button (click)="downloadQr()">Download QR Code</button>
+      } @else {
+        <p>Generating QR code...</p>
       }
+    </div>
 
-      <div class="form-actions">
-        <button type="button" (click)="showTransferForm.set(false)">Cancel</button>
-        <button type="submit" [disabled]="transferForm.invalid || transferSubmitting()">
-          {{ transferSubmitting() ? 'Sending...' : 'Send Transfer Request' }}
-        </button>
-      </div>
-    </form>
+    <div class="transfer-section">
+      @if (transferSuccess()) {
+        <p class="success-message">{{ transferSuccess() }}</p>
+      } @else if (!showTransferForm()) {
+        <button (click)="showTransferForm.set(true)">Transfer Ownership</button>
+      } @else {
+        <form [formGroup]="transferForm" (ngSubmit)="onStartTransfer()">
+          <label>
+            Buyer's Email
+            <input type="email" formControlName="buyerEmail" placeholder="buyer@example.com" />
+          </label>
+          <p class="hint">The buyer must already have a DeviceTrust account.</p>
+
+          @if (transferError()) {
+            <p class="form-error">{{ transferError() }}</p>
+          }
+
+          <div class="form-actions">
+            <button type="button" (click)="showTransferForm.set(false)">Cancel</button>
+            <button type="submit" [disabled]="transferForm.invalid || transferSubmitting()">
+              {{ transferSubmitting() ? 'Sending...' : 'Send Transfer Request' }}
+            </button>
+          </div>
+        </form>
+      }
+    </div>
   }
 </div>
