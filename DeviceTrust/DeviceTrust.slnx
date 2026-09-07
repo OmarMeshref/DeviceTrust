@@ -2,4 +2,5 @@
   <Project Path="DeviceTrust.Api/DeviceTrust.Api.csproj" />
   <Project Path="DeviceTrust.Domain/DeviceTrust.Domain.csproj" />
   <Project Path="DeviceTrust.Infrastructure/DeviceTrust.Infrastructure.csproj" />
+  <Project Path="DeviceTrust.Tests/DeviceTrust.Tests.csproj" />
 </Solution>
