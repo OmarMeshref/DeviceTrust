@@ -32,7 +32,7 @@ export class AuthService {
     localStorage.removeItem(EMAIL_KEY);
     this.isLoggedIn.set(false);
     this.currentRole.set(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   getToken(): string | null {

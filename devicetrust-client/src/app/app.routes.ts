@@ -10,11 +10,12 @@ import { TechnicianDashboardComponent } from './features/repairs/technician-dash
 import { RepairCreateComponent } from './features/repairs/repair-create/repair-create';
 import { RepairDetailComponent } from './features/repairs/repair-detail/repair-detail';
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard';
+import { LandingComponent } from './features/landing/landing';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
   {

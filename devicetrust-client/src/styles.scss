@@ -66,6 +66,9 @@ a:hover { text-decoration: underline; }
 
 .navbar {
   display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
@@ -435,4 +438,108 @@ table {
   }
 
   .timeline-action { color: var(--ink-950); }
+}
+
+.navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-950);
+  text-decoration: none;
+}
+
+.landing {
+  .hero {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 3rem;
+    text-align: left;
+
+    .eyebrow-free {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--trust-600);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .lede {
+      font-size: 1.05rem;
+      color: var(--steel-600);
+      max-width: 56ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+  }
+
+  .lookup-panel {
+    max-width: 640px;
+    margin: 0 auto 3rem;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid var(--steel-200);
+    border-radius: 8px;
+
+    h2 { font-size: 1rem; margin-bottom: 0.75rem; }
+
+    form {
+      flex-direction: row;
+      max-width: none;
+      gap: 0.75rem;
+
+      input { flex: 1; }
+    }
+  }
+
+  .how-it-works, .for-whom {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+
+    h2 { text-align: left; margin-bottom: 1.5rem; }
+  }
+
+  .steps, .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .step {
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--trust-100);
+      color: var(--trust-700);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+    h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+    p { font-size: 0.9rem; }
+  }
+
+  .audience-card {
+    padding: 1.25rem;
+    background: white;
+    border: 1px solid var(--steel-200);
+    border-radius: 8px;
+
+    h3 { font-size: 1rem; }
+    p { font-size: 0.875rem; margin: 0; }
+  }
 }

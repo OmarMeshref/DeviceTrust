@@ -1,0 +1,63 @@
+<div class="landing">
+  <section class="hero">
+    <span class="eyebrow-free">A digital passport for every device</span>
+    <h1>Know a device's real history before you buy it.</h1>
+    <p class="lede">
+      DeviceTrust records every verified repair a device goes through — screen swaps,
+      battery replacements, motherboard work — in a permanent history that survives
+      changes in ownership and can't be quietly edited.
+    </p>
+
+    <div class="hero-actions">
+      <a routerLink="/register" class="btn-primary">Register a Device</a>
+      <a routerLink="/login">Login</a>
+    </div>
+  </section>
+
+  <section class="lookup-panel">
+    <h2>Already have a Passport ID?</h2>
+    <form [formGroup]="lookupForm" (ngSubmit)="onLookup()">
+      <input type="text" formControlName="publicId" placeholder="e.g. DVT-A83K92" />
+      <button type="submit" [disabled]="lookupForm.invalid">Look Up Passport</button>
+    </form>
+  </section>
+
+  <section class="how-it-works">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-number">1</span>
+        <h3>Register the device</h3>
+        <p>An owner registers a device and gets a unique Passport ID and QR code to attach to it.</p>
+      </div>
+      <div class="step">
+        <span class="step-number">2</span>
+        <h3>Repairs get logged</h3>
+        <p>An approved technician scans the device and logs diagnosis, parts, and work done. Once submitted, it's permanent.</p>
+      </div>
+      <div class="step">
+        <span class="step-number">3</span>
+        <h3>Anyone can verify it</h3>
+        <p>Scan the QR or enter the Passport ID — no account needed — to see the device's full verified history.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="for-whom">
+    <h2>Built for</h2>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <h3>Owners</h3>
+        <p>Prove your device's history and sell it with less friction.</p>
+      </div>
+      <div class="audience-card">
+        <h3>Buyers</h3>
+        <p>Check a device's real repair history before you pay for it.</p>
+      </div>
+      <div class="audience-card">
+        <h3>Repair Centers</h3>
+        <p>Build a visible, permanent record of your work.</p>
+      </div>
+    </div>
+  </section>
+</div>
