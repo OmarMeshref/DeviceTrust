@@ -6,6 +6,7 @@ A Full-Stack Orange Coding Academy final project — an ASP.NET Core + Angular a
 
 - [Problem](#problem)
 - [Solution](#solution)
+- [Screenshots](#screenshots)
 - [What DeviceTrust Is Not](#what-devicetrust-is-not)
 - [Target Users & Roles](#target-users--roles)
 - [Core Features](#core-features)
@@ -40,6 +41,23 @@ Think of it as a Carfax for electronics, or a medical record that follows the de
 - **Not a marketplace or e-commerce platform** — no listings, no payments, no in-app buying/selling
 - **Not a repair-shop management system** — it doesn't handle scheduling, invoicing, or parts inventory
 - **Not blockchain-based** — trust is enforced through backend authorization, an append-only verification workflow, database constraints, and audit logging, not a distributed ledger. This was a deliberate scope decision (see [Known Limitations](#known-limitations))
+
+## Screenshots
+
+**Landing page** — the public entry point: problem statement, a quick Passport ID lookup, and a walkthrough of how the system works.
+![Landing page](docs/screenshots/landing.png)
+
+**Public Device Passport** — the core trust artifact. No login required; masked serial number, verified-vs-total repair count as a trust signal, and the full repair timeline.
+![Public Passport](docs/screenshots/passport.png)
+
+**Owner view** — a registered owner's devices, each with its Passport ID, QR code, and ownership transfer controls.
+![Owner dashboard](docs/screenshots/owner.png)
+
+**Technician view** — looking up a device by its Passport ID and logging a repair against it.
+![Technician dashboard](docs/screenshots/technician.png)
+
+**Admin dashboard** — approving Repair Centers and linking/approving Technicians, the gatekeeping step that makes a repair record trustworthy.
+![Admin dashboard](docs/screenshots/admin.png)
 
 ## Target Users & Roles
 
