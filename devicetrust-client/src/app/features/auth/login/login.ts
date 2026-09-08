@@ -32,7 +32,7 @@ export class LoginComponent {
     this.authService.login(this.form.getRawValue() as { email: string; password: string }).subscribe({
       next: () => {
         const role = this.authService.getRole();
-        if (role === 'Owner') this.router.navigate(['/owner/devices']);
+        if (role === 'Owner') this.router.navigate(['/owner/home']);
         else if (role === 'Technician') this.router.navigate(['/technician/dashboard']);
         else if (role === 'Admin') this.router.navigate(['/admin/dashboard']);
         else this.router.navigate(['/']);

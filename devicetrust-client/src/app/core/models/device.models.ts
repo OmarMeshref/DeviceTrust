@@ -27,3 +27,10 @@ export interface CreateDeviceRequest {
   serialNumber: string;
   purchaseDate: string | null;
 }
+
+export interface OwnerSummary {
+  totalDevices: number;
+  pendingTransfersOut: number;
+  pendingTransfersIn: number;
+  totalRepairsAcrossDevices: number;
+}

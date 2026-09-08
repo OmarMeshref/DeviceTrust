@@ -1,0 +1,31 @@
+<div class="page">
+  <h1>Welcome back</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (summary(); as s) {
+    <div class="stats-grid">
+      <a routerLink="/owner/devices" class="stat-card">
+        <span class="stat-value">{{ s.totalDevices }}</span>
+        <span class="stat-label">Devices Registered</span>
+      </a>
+      <a routerLink="/transfers/pending" class="stat-card">
+        <span class="stat-value">{{ s.pendingTransfersIn }}</span>
+        <span class="stat-label">Incoming Transfer Requests</span>
+      </a>
+      <div class="stat-card">
+        <span class="stat-value">{{ s.pendingTransfersOut }}</span>
+        <span class="stat-label">Transfers You've Sent</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ s.totalRepairsAcrossDevices }}</span>
+        <span class="stat-label">Total Repairs Logged</span>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a routerLink="/owner/devices/new" class="btn-primary">+ Register a New Device</a>
+      <a routerLink="/owner/devices">View All Devices &rarr;</a>
+    </div>
+  }
+</div>

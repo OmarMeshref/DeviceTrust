@@ -97,4 +97,29 @@ public class DeviceService
         return await _context.Devices
             .FirstOrDefaultAsync(d => d.PublicPassportId == publicPassportId);
     }
+
+    public async Task<OwnerSummary> GetOwnerSummaryAsync(string ownerId)
+    {
+        var deviceIds = await _context.Devices
+            .Where(d => d.Ownerships.Any(o => o.OwnerId == ownerId && o.EndDate == null))
+            .Select(d => d.Id)
+            .ToListAsync();
+
+        var totalRepairs = await _context.RepairRecords
+            .CountAsync(r => deviceIds.Contains(r.DeviceId));
+
+        var pendingOut = await _context.OwnershipTransfers
+            .CountAsync(t => t.InitiatingOwnerId == ownerId && t.Status == Domain.Enums.TransferStatus.Pending);
+
+        var pendingIn = await _context.OwnershipTransfers
+            .CountAsync(t => t.TargetBuyerId == ownerId && t.Status == Domain.Enums.TransferStatus.Pending);
+
+        return new OwnerSummary
+        {
+            TotalDevices = deviceIds.Count,
+            PendingTransfersOut = pendingOut,
+            PendingTransfersIn = pendingIn,
+            TotalRepairsAcrossDevices = totalRepairs
+        };
+    }
 }

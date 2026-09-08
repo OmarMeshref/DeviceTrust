@@ -10,9 +10,12 @@ import { TechnicianDashboardComponent } from './features/repairs/technician-dash
 import { RepairCreateComponent } from './features/repairs/repair-create/repair-create';
 import { RepairDetailComponent } from './features/repairs/repair-detail/repair-detail';
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard';
+import { OwnerHomeComponent } from './features/devices/owner-home/owner-home';
 import { LandingComponent } from './features/landing/landing';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { UnauthorizedComponent } from './shared/unauthorized/unauthorized';
+import { NotFoundComponent } from './shared/not-found/not-found';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -68,5 +71,19 @@ export const routes: Routes = [
     component: AdminDashboardComponent,
     canActivate: [authGuard],
     data: { role: 'Admin' }
-  }
+  },
+  {
+    path: 'owner/home',
+    component: OwnerHomeComponent,
+    canActivate: [authGuard],
+    data: { role: 'Owner' }
+  },
+  {
+    path: 'unauthorized', 
+    component: UnauthorizedComponent 
+  },
+  { 
+    path: '**', 
+    component: NotFoundComponent 
+  } 
 ];

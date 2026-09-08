@@ -73,4 +73,12 @@ public class DevicesController : ControllerBase
             device.PublicPassportId
         });
     }
+
+    [HttpGet("summary")]
+    public async Task<IActionResult> GetSummary()
+    {
+        var ownerId = User.GetUserId();
+        var summary = await _deviceService.GetOwnerSummaryAsync(ownerId);
+        return Ok(summary); 
+    }
 }

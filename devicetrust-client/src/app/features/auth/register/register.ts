@@ -34,7 +34,7 @@ export class RegisterComponent {
     this.authService.register(this.form.getRawValue() as any).subscribe({
       next: () => {
         const role = this.authService.getRole();
-        if (role === 'Owner') this.router.navigate(['/owner/devices']);
+        if (role === 'Owner') this.router.navigate(['/owner/home']);
         else if (role === 'Technician') this.router.navigate(['/technician/dashboard']);
         else this.router.navigate(['/']);
       },

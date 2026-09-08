@@ -13,6 +13,7 @@
   @if (authService.isLoggedIn()) {
     <div class="nav-links">
       @if (authService.getRole() === 'Owner') {
+        <a routerLink="/owner/home">Home</a>
         <a routerLink="/owner/devices">My Devices</a>
         <a routerLink="/transfers/pending">Transfers</a>
       }
@@ -25,10 +26,6 @@
       <span>{{ authService.getRole() }}</span>
       <button (click)="onLogout()">Logout</button>
     </div>
-  } @else {
-    <div class="nav-links">
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Register</a>
-    </div>
   }
+
 </nav>

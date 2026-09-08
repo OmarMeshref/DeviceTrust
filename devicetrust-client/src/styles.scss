@@ -23,11 +23,33 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
   background: var(--paper-50);
   color: var(--ink-950);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
+}
+
+// Sticky-footer layout: app-root becomes a full-height flex column. app-navbar
+// and app-footer keep their natural size; .app-main (wrapping the router outlet
+// in app.html) grows to fill whatever space is left, pushing the footer to the
+// bottom on short pages while letting it flow naturally after long content.
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-navbar,
+app-footer {
+  flex: 0 0 auto;
+}
+
+.app-main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3 {
@@ -99,6 +121,14 @@ a:hover { text-decoration: underline; }
       border-radius: 4px;
     }
   }
+}
+
+.navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-950);
+  text-decoration: none;
 }
 
 form {
@@ -440,14 +470,6 @@ table {
   .timeline-action { color: var(--ink-950); }
 }
 
-.navbar .brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--ink-950);
-  text-decoration: none;
-}
-
 .landing {
   .hero {
     max-width: 640px;
@@ -542,4 +564,73 @@ table {
     h3 { font-size: 1rem; }
     p { font-size: 0.875rem; margin: 0; }
   }
+}
+
+.footer {
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--steel-200);
+  background: white;
+  text-align: center;
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+
+    .footer-brand { font-family: var(--font-heading); font-weight: 600; color: var(--ink-950); }
+    .footer-note { color: var(--steel-600); }
+  }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: var(--steel-600);
+    margin: 0.75rem 0 0;
+  }
+}
+
+.centered-message {
+  text-align: center;
+  padding-top: 4rem;
+
+  p { max-width: 40ch; margin: 0 auto 1.5rem; }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid var(--steel-200);
+  border-radius: 8px;
+  text-decoration: none;
+
+  &:hover { border-color: var(--trust-600); text-decoration: none; }
+
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink-950);
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--steel-600);
+  }
+}
+
+.quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
