@@ -122,4 +122,12 @@ public class DeviceService
             TotalRepairsAcrossDevices = totalRepairs
         };
     }
+
+    public async Task<List<Ownership>> GetOwnershipHistoryAsync(int deviceId)
+    {
+        return await _context.Ownerships
+            .Where(o => o.DeviceId == deviceId)
+            .OrderByDescending(o => o.StartDate)
+            .ToListAsync();
+    }
 }

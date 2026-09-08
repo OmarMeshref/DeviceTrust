@@ -37,28 +37,6 @@ public class DevicesController : ControllerBase
         return Ok(dto);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetDevice(int id)
-    {
-        var ownerId = User.GetUserId();
-        var (device, repairCount) = await _deviceService.GetDeviceForOwnerAsync(id, ownerId);
-
-        if (device is null) return NotFound();
-
-        return Ok(new OwnerDeviceDetailDto
-        {
-            Id = device.Id,
-            PublicPassportId = device.PublicPassportId,
-            Type = device.Type,
-            Brand = device.Brand,
-            Model = device.Model,
-            SerialNumber = device.SerialNumber,
-            PurchaseDate = device.PurchaseDate,
-            RegisteredAt = device.RegisteredAt,
-            RepairCount = repairCount
-        });
-    }
-
     [HttpPost]
     public async Task<IActionResult> CreateDevice(CreateDeviceRequestDto dto)
     {
@@ -80,5 +58,35 @@ public class DevicesController : ControllerBase
         var ownerId = User.GetUserId();
         var summary = await _deviceService.GetOwnerSummaryAsync(ownerId);
         return Ok(summary); 
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetDevice(int id)
+    {
+        var ownerId = User.GetUserId();
+        var (device, repairCount) = await _deviceService.GetDeviceForOwnerAsync(id, ownerId);
+
+        if (device is null) return NotFound();
+
+        var history = await _deviceService.GetOwnershipHistoryAsync(id);
+
+        return Ok(new OwnerDeviceDetailDto
+        {
+            Id = device.Id,
+            PublicPassportId = device.PublicPassportId,
+            Type = device.Type,
+            Brand = device.Brand,
+            Model = device.Model,
+            SerialNumber = device.SerialNumber,
+            PurchaseDate = device.PurchaseDate,
+            RegisteredAt = device.RegisteredAt,
+            RepairCount = repairCount,
+            OwnershipHistory = history.Select(o => new OwnershipPeriodDto
+            {
+                StartDate = o.StartDate,
+                EndDate = o.EndDate,
+                IsCurrent = o.EndDate == null
+            }).ToList()
+        });
     }
 }

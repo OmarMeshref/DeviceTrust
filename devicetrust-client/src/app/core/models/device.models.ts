@@ -14,10 +14,17 @@ export interface DeviceListItem {
   registeredAt: string;
 }
 
+export interface OwnershipPeriod {
+  startDate: string;
+  endDate: string | null;
+  isCurrent: boolean;
+}
+
 export interface DeviceDetail extends DeviceListItem {
   serialNumber: string;
   purchaseDate: string | null;
   repairCount: number;
+  ownershipHistory: OwnershipPeriod[];
 }
 
 export interface CreateDeviceRequest {

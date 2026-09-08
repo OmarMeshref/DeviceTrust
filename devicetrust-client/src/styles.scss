@@ -634,3 +634,20 @@ table {
   align-items: center;
   gap: 1.25rem;
 }
+
+.ownership-history {
+  margin: 1.5rem 0;
+
+  .ownership-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--steel-200);
+    font-size: 0.875rem;
+
+    &:last-child { border-bottom: none; }
+  }
+
+  .ownership-dates { color: var(--ink-950); }
+}

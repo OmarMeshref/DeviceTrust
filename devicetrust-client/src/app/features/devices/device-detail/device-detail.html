@@ -15,6 +15,20 @@
     }
     <p><strong>Repairs Logged:</strong> {{ d.repairCount }}</p>
 
+    <div class="ownership-history">
+      <h2>Ownership History</h2>
+      @for (period of d.ownershipHistory; track period.startDate) {
+        <div class="ownership-row">
+          <span class="ownership-dates">
+            {{ period.startDate | date }} &rarr; {{ period.isCurrent ? 'Present' : (period.endDate | date) }}
+          </span>
+          @if (period.isCurrent) {
+            <span class="status-badge status-verified">Current</span>
+          }
+        </div>
+      }
+    </div>
+
     <a [routerLink]="['/passport', d.publicPassportId]" target="_blank">
       View Public Passport &rarr;
     </a>
