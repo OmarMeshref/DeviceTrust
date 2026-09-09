@@ -13,11 +13,11 @@
         <span class="stat-value">{{ s.pendingTransfersIn }}</span>
         <span class="stat-label">Incoming Transfer Requests</span>
       </a>
-      <div class="stat-card">
+      <a routerLink="/transfers/pending" class="stat-card">
         <span class="stat-value">{{ s.pendingTransfersOut }}</span>
         <span class="stat-label">Transfers You've Sent</span>
-      </div>
-      <div class="stat-card">
+      </a>
+      <div class="stat-card stat-card-static">
         <span class="stat-value">{{ s.totalRepairsAcrossDevices }}</span>
         <span class="stat-label">Total Repairs Logged</span>
       </div>

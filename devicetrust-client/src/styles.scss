@@ -31,6 +31,10 @@ html, body {
   line-height: 1.5;
 }
 
+body {
+  overflow-x: hidden; // guards against mobile-layout horizontal scroll; does not affect vertical sticky
+}
+
 // Sticky-footer layout: app-root becomes a full-height flex column. app-navbar
 // and app-footer keep their natural size; .app-main (wrapping the router outlet
 // in app.html) grows to fill whatever space is left, pushing the footer to the
@@ -41,7 +45,17 @@ app-root {
   min-height: 100vh;
 }
 
-app-navbar,
+app-navbar {
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  // Sticky is set on the host element itself (app-navbar), not just the
+  // inner .navbar tag — inside a flex container, sticky positioning must be
+  // applied at the flex-item level to reliably stick relative to the page,
+  // not just to its own internal box.
+}
+
 app-footer {
   flex: 0 0 auto;
 }
@@ -88,9 +102,6 @@ a:hover { text-decoration: underline; }
 
 .navbar {
   display: flex;
-  position: sticky;
-  top: 0;
-  z-index: 100;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
@@ -129,6 +140,12 @@ a:hover { text-decoration: underline; }
   gap: 0.5rem;
   color: var(--ink-950);
   text-decoration: none;
+}
+
+.navbar .brand-logo {
+  height: 45px;
+  width: auto;
+  display: block;
 }
 
 form {
@@ -259,7 +276,7 @@ button, .btn-primary {
   border-radius: 8px;
   background: white;
 
-  img { display: block; margin: 0.75rem 0; border-radius: 4px; }
+  img { display: block; margin: 0.75rem 0; border-radius: 4px; max-width: 100%; height: auto; }
 }
 
 .transfer-section { margin: 1.5rem 0; }
@@ -597,6 +614,30 @@ table {
   p { max-width: 40ch; margin: 0 auto 1.5rem; }
 }
 
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--steel-200);
+
+  button {
+    background: none;
+    color: var(--steel-600);
+    border: none;
+    border-radius: 0;
+    padding: 0.6rem 0.25rem;
+    margin-right: 1.5rem;
+    font-weight: 500;
+
+    &:hover:not(:disabled) { background: none; color: var(--ink-950); }
+
+    &.tab-active {
+      color: var(--trust-600);
+      border-bottom: 2px solid var(--trust-600);
+    }
+  }
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -629,6 +670,14 @@ table {
   }
 }
 
+// Modifier for stat cards with no navigation destination — explicitly
+// overrides the hover-highlight and pointer cursor .stat-card sets by
+// default, so the lack of a click action reads as intentional, not broken.
+.stat-card-static {
+  cursor: default;
+  &:hover { border-color: var(--steel-200); }
+}
+
 .quick-actions {
   display: flex;
   align-items: center;
@@ -652,36 +701,6 @@ table {
   .ownership-dates { color: var(--ink-950); }
 }
 
-.navbar .brand-logo {
-  height: 60px;   
-  width: auto;
-  display: block;
-}
-
-.tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--steel-200);
-
-  button {
-    background: none;
-    color: var(--steel-600);
-    border: none;
-    border-radius: 0;
-    padding: 0.6rem 0.25rem;
-    margin-right: 1.5rem;
-    font-weight: 500;
-
-    &:hover:not(:disabled) { background: none; color: var(--ink-950); }
-
-    &.tab-active {
-      color: var(--trust-600);
-      border-bottom: 2px solid var(--trust-600);
-    }
-  }
-}
-
 .profile-card {
   max-width: 420px;
   background: white;
@@ -699,5 +718,50 @@ table {
 
     .label { color: var(--steel-600); font-size: 0.875rem; }
     .value { color: var(--ink-950); font-weight: 500; }
+  }
+}
+
+// ---------- Responsive adjustments ----------
+@media (max-width: 640px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    .nav-links {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      width: 100%;
+    }
+  }
+
+  .page {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .landing .hero h1 {
+    font-size: 1.65rem;
+  }
+
+  .landing .hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .device-grid,
+  .stats-grid,
+  .landing .steps,
+  .landing .audience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .passport-facts {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }
