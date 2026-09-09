@@ -1,13 +1,6 @@
 <nav class="navbar">
   <a routerLink="/" class="brand">
-    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 8V4a2 2 0 0 1 2-2h4" stroke="#0D7D74" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M26 8V4a2 2 0 0 0-2-2h-4" stroke="#0D7D74" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M2 20v4a2 2 0 0 0 2 2h4" stroke="#0D7D74" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M26 20v4a2 2 0 0 1-2 2h-4" stroke="#0D7D74" stroke-width="2.2" stroke-linecap="round"/>
-      <circle cx="14" cy="14" r="3.5" fill="#0F172A"/>
-    </svg>
-    <span>DeviceTrust</span>
+    <img src="logo.png" alt="DeviceTrust" class="brand-logo" />
   </a>
 
   @if (authService.isLoggedIn()) {
