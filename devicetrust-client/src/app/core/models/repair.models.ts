@@ -52,3 +52,13 @@ export interface RepairDetail {
   correctsRecordId: number | null;
   parts: RepairPart[];
 }
+
+export interface RepairListItem {
+  id: number;
+  devicePublicPassportId: string;
+  deviceBrand: string;
+  deviceModel: string;
+  status: RepairStatus;
+  repairDate: string;
+  createdAt: string;
+}

@@ -172,6 +172,16 @@ public class RepairService
             .Include(r => r.TechnicianProfile)
             .FirstOrDefaultAsync(r => r.Id == repairId);
     }
+
+    public async Task<List<RepairRecord>> GetRepairsByTechnicianAsync(string technicianUserId)
+    {
+        return await _context.RepairRecords
+            .Include(r => r.Parts)
+            .Include(r => r.Device)
+            .Where(r => r.TechnicianProfile.UserId == technicianUserId)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+    }
 }
 
 public record CreateRepairInput(

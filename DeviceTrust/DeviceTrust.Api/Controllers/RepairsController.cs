@@ -137,4 +137,25 @@ public class RepairsController : ControllerBase
             Notes = p.Notes
         }).ToList()
     };
+
+    [HttpGet("api/technicians/repairs")]
+    [Authorize(Roles = "Technician")]
+    public async Task<IActionResult> GetMyRepairs()
+    {
+        var technicianUserId = User.GetUserId();
+        var records = await _repairService.GetRepairsByTechnicianAsync(technicianUserId);
+
+        var dto = records.Select(r => new RepairListItemDto
+        {
+            Id = r.Id,
+            DevicePublicPassportId = r.Device.PublicPassportId,
+            DeviceBrand = r.Device.Brand,
+            DeviceModel = r.Device.Model,
+            Status = r.Status,
+            RepairDate = r.RepairDate,
+            CreatedAt = r.CreatedAt
+        });
+
+        return Ok(dto);
+    }
 }

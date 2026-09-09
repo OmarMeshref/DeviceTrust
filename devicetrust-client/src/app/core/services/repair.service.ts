@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AddPartRequest, CreateRepairRequest, DeviceLookup, RepairDetail } from '../models/repair.models';
+import { AddPartRequest, CreateRepairRequest, DeviceLookup, RepairDetail, RepairListItem } from '../models/repair.models';
 
 @Injectable({ providedIn: 'root' })
 export class RepairService {
@@ -28,4 +28,8 @@ export class RepairService {
   submit(repairId: number): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${environment.apiUrl}/repairs/${repairId}/submit`, {});
   }
+
+  getMyRepairs(): Observable<RepairListItem[]> {
+  return this.http.get<RepairListItem[]>(`${environment.apiUrl}/technicians/repairs`);
+}
 }

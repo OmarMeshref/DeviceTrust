@@ -19,6 +19,7 @@
       }
       @if (authService.getRole() === 'Technician') {
         <a routerLink="/technician/dashboard">Find Device</a>
+        <a routerLink="/technician/repairs">My Repairs</a>
       }
       @if (authService.getRole() === 'Admin') {
         <a routerLink="/admin/dashboard">Admin</a>

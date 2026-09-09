@@ -16,6 +16,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { UnauthorizedComponent } from './shared/unauthorized/unauthorized';
 import { NotFoundComponent } from './shared/not-found/not-found';
+import { RepairListComponent } from './features/repairs/repair-list/repair-list';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -77,6 +78,12 @@ export const routes: Routes = [
     component: OwnerHomeComponent,
     canActivate: [authGuard],
     data: { role: 'Owner' }
+  },
+  {
+    path: 'technician/repairs',
+    component: RepairListComponent,
+    canActivate: [authGuard],
+    data: { role: 'Technician' }
   },
   {
     path: 'unauthorized', 
