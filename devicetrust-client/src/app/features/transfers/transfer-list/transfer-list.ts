@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransferService } from '../../../core/services/transfer.service';
-import { Transfer } from '../../../core/models/transfer.models';
+import { Transfer, TransferStatus } from '../../../core/models/transfer.models';
 
 @Component({
   selector: 'app-transfer-list',
@@ -10,10 +10,12 @@ import { Transfer } from '../../../core/models/transfer.models';
   templateUrl: './transfer-list.html'
 })
 export class TransferListComponent implements OnInit {
+  activeTab = signal<'pending' | 'history'>('pending');
   transfers = signal<Transfer[]>([]);
   isLoading = signal(true);
   errorMessage = signal<string | null>(null);
-  actioningId = signal<number | null>(null); // tracks which row's button is mid-request, to disable just that one
+  actioningId = signal<number | null>(null);
+  TransferStatus = TransferStatus;
 
   constructor(private transferService: TransferService) {}
 
@@ -21,9 +23,18 @@ export class TransferListComponent implements OnInit {
     this.load();
   }
 
+  switchTab(tab: 'pending' | 'history'): void {
+    this.activeTab.set(tab);
+    this.load();
+  }
+
   load(): void {
     this.isLoading.set(true);
-    this.transferService.getPending().subscribe({
+    const source = this.activeTab() === 'pending'
+      ? this.transferService.getPending()
+      : this.transferService.getHistory();
+
+    source.subscribe({
       next: (transfers) => {
         this.transfers.set(transfers);
         this.isLoading.set(false);

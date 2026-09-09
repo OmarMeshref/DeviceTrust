@@ -179,4 +179,14 @@ public class TransferService
         foreach (var t in stale) t.Status = TransferStatus.Expired;
         if (stale.Count > 0) await _context.SaveChangesAsync();
     }
+
+    public async Task<List<OwnershipTransfer>> GetTransferHistoryAsync(string userId)
+    {
+        return await _context.OwnershipTransfers
+            .Include(t => t.Device)
+            .Where(t => (t.InitiatingOwnerId == userId || t.TargetBuyerId == userId)
+                        && t.Status != TransferStatus.Pending)
+            .OrderByDescending(t => t.RespondedAt ?? t.CreatedAt)
+            .ToListAsync();
+    }
 }

@@ -657,3 +657,27 @@ table {
   width: auto;
   display: block;
 }
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--steel-200);
+
+  button {
+    background: none;
+    color: var(--steel-600);
+    border: none;
+    border-radius: 0;
+    padding: 0.6rem 0.25rem;
+    margin-right: 1.5rem;
+    font-weight: 500;
+
+    &:hover:not(:disabled) { background: none; color: var(--ink-950); }
+
+    &.tab-active {
+      color: var(--trust-600);
+      border-bottom: 2px solid var(--trust-600);
+    }
+  }
+}

@@ -43,7 +43,9 @@ public class TransfersController : ControllerBase
             DeviceModel = t.Device.Model,
             Status = t.Status,
             CreatedAt = t.CreatedAt,
-            ExpiresAt = t.ExpiresAt
+            ExpiresAt = t.ExpiresAt,
+            RespondedAt = t.RespondedAt,
+            CallerRole = "Buyer"
         });
 
         return Ok(dto);
@@ -74,5 +76,28 @@ public class TransfersController : ControllerBase
         var (success, error) = await _transferService.CancelTransferAsync(id, ownerId);
 
         return success ? Ok(new { message = "Transfer cancelled." }) : BadRequest(new { error });
+    }
+
+    [HttpGet("api/transfers/history")]
+    public async Task<IActionResult> GetHistory()
+    {
+        var userId = User.GetUserId();
+        var transfers = await _transferService.GetTransferHistoryAsync(userId);
+
+        var dto = transfers.Select(t => new TransferDto
+        {
+            Id = t.Id,
+            DeviceId = t.DeviceId,
+            DevicePublicPassportId = t.Device.PublicPassportId,
+            DeviceBrand = t.Device.Brand,
+            DeviceModel = t.Device.Model,
+            Status = t.Status,
+            CreatedAt = t.CreatedAt,
+            ExpiresAt = t.ExpiresAt,
+            RespondedAt = t.RespondedAt,
+            CallerRole = t.InitiatingOwnerId == userId ? "Seller" : "Buyer"
+        });
+
+        return Ok(dto);
     }
 }

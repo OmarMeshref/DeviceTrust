@@ -28,4 +28,8 @@ export class TransferService {
   cancel(transferId: number): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${environment.apiUrl}/transfers/${transferId}/cancel`, {});
   }
+
+  getHistory(): Observable<Transfer[]> {
+    return this.http.get<Transfer[]>(`${environment.apiUrl}/transfers/history`);
+  }
 }

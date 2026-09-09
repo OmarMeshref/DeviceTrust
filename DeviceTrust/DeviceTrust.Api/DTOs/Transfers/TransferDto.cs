@@ -12,4 +12,6 @@ public class TransferDto
     public TransferStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
+    public DateTime? RespondedAt { get; set; }
+    public string CallerRole { get; set; } = default!; 
 }

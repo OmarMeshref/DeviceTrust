@@ -19,4 +19,6 @@ export interface Transfer {
   status: TransferStatus;
   createdAt: string;
   expiresAt: string;
+  respondedAt: string | null;
+  callerRole: 'Seller' | 'Buyer';
 }
