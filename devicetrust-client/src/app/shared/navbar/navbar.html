@@ -1,3 +1,4 @@
+<!-- src/app/shared/navbar/navbar.html -->
 <nav class="navbar">
   <a routerLink="/" class="brand">
     <img src="logo.png" alt="DeviceTrust" class="brand-logo" />
@@ -6,21 +7,27 @@
   @if (authService.isLoggedIn()) {
     <div class="nav-links">
       @if (authService.getRole() === 'Owner') {
-        <a routerLink="/owner/home">Home</a>
-        <a routerLink="/owner/devices">My Devices</a>
-        <a routerLink="/transfers/pending">Transfers</a>
+        <a routerLink="/owner/home" routerLinkActive="nav-active">Home</a>
+        <a routerLink="/owner/devices" routerLinkActive="nav-active">My devices</a>
+        <a routerLink="/transfers/pending" routerLinkActive="nav-active">Transfers</a>
       }
       @if (authService.getRole() === 'Technician') {
-        <a routerLink="/technician/dashboard">Find Device</a>
-        <a routerLink="/technician/repairs">My Repairs</a>
+        <a routerLink="/technician/dashboard" routerLinkActive="nav-active">Find device</a>
+        <a routerLink="/technician/repairs" routerLinkActive="nav-active">My repairs</a>
       }
       @if (authService.getRole() === 'Admin') {
-        <a routerLink="/admin/dashboard">Admin</a>
+        <a routerLink="/admin/dashboard" routerLinkActive="nav-active">Admin</a>
       }
-      <a routerLink="/profile">Profile</a>
-      <span>{{ authService.getRole() }}</span>
-      <button (click)="onLogout()">Logout</button>
+      <a routerLink="/profile" routerLinkActive="nav-active">Profile</a>
+      <span class="nav-role">{{ authService.getRole() }}</span>
+      <button class="btn-ghost" (click)="onLogout()">Sign out</button>
+    </div>
+  } @else {
+    <div class="nav-links">
+      <a routerLink="/about" routerLinkActive="nav-active">About</a>
+      <a routerLink="/contact" routerLinkActive="nav-active">Contact</a>
+      <a routerLink="/login" routerLinkActive="nav-active">Sign in</a>
+      <a routerLink="/register" class="btn-nav">Create account</a>
     </div>
   }
-
 </nav>

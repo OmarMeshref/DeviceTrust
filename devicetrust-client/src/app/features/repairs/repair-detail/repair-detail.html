@@ -1,49 +1,68 @@
 <div class="page">
   @if (isLoading()) {
-    <p>Loading repair record...</p>
+    <p>Loading repair record…</p>
   } @else if (repair(); as r) {
-    <h1>Repair #{{ r.id }}</h1>
+    <span class="page-eyebrow">Repair #{{ r.id }}</span>
+    <div class="page-header">
+      <h1>{{ r.status === RepairStatus.Draft ? 'Draft repair' : 'Verified repair' }}</h1>
+      <span class="status-badge" [class.status-draft]="r.status === RepairStatus.Draft"
+                                 [class.status-verified]="r.status === RepairStatus.Verified">
+        {{ r.status === RepairStatus.Draft ? 'Draft' : 'Verified' }}
+      </span>
+    </div>
 
-    <span class="status-badge" [class.status-draft]="r.status === RepairStatus.Draft"
-                               [class.status-verified]="r.status === RepairStatus.Verified">
-      {{ r.status === RepairStatus.Draft ? 'Draft' : 'Verified' }}
-    </span>
+    <div class="spec-plate">
+      <div class="spec-row">
+        <span class="spec-label">Problem</span>
+        <span class="spec-value">{{ r.problemDescription }}</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Diagnosis</span>
+        <span class="spec-value">{{ r.diagnosis }}</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Action taken</span>
+        <span class="spec-value">{{ r.actionTaken }}</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Repair date</span>
+        <span class="spec-value">{{ r.repairDate | date }}</span>
+      </div>
+      @if (r.warrantyUntil) {
+        <div class="spec-row">
+          <span class="spec-label">Warranty until</span>
+          <span class="spec-value">{{ r.warrantyUntil | date }}</span>
+        </div>
+      }
+    </div>
 
-    <p><strong>Problem:</strong> {{ r.problemDescription }}</p>
-    <p><strong>Diagnosis:</strong> {{ r.diagnosis }}</p>
-    <p><strong>Action Taken:</strong> {{ r.actionTaken }}</p>
-    <p><strong>Repair Date:</strong> {{ r.repairDate | date }}</p>
-    @if (r.warrantyUntil) {
-      <p><strong>Warranty Until:</strong> {{ r.warrantyUntil | date }}</p>
-    }
-
-    <h2>Parts</h2>
+    <h2 class="section-title">Parts</h2>
     @if (r.parts.length === 0) {
       <p>No parts logged yet.</p>
     } @else {
-      @for (p of r.parts; track p.id) {
-        <div class="part-row">
-          <strong>{{ p.partName }}</strong> ({{ p.partType }})
-          @if (!p.isOriginal) { <span class="badge-replacement">Replacement</span> }
-          @if (p.oldPartSerial || p.newPartSerial) {
-            <p class="small">Old: {{ p.oldPartSerial || '—' }} → New: {{ p.newPartSerial || '—' }}</p>
-          }
-        </div>
-      }
+      <div class="spec-plate">
+        @for (p of r.parts; track p.id) {
+          <div class="part-row">
+            <strong>{{ p.partName }}</strong> ({{ p.partType }})
+            @if (!p.isOriginal) { <span class="badge-replacement">Replacement</span> }
+            @if (p.oldPartSerial || p.newPartSerial) {
+              <p class="small">Old: {{ p.oldPartSerial || '—' }} &rarr; New: {{ p.newPartSerial || '—' }}</p>
+            }
+          </div>
+        }
+      </div>
     }
 
     @if (r.status === RepairStatus.Draft) {
       @if (!showPartForm()) {
-        <button (click)="showPartForm.set(true)">+ Add Part</button>
+        <button (click)="showPartForm.set(true)" style="margin-top: 1rem;">+ Add part</button>
       } @else {
         <form [formGroup]="partForm" (ngSubmit)="onAddPart()">
-          <label>Part Name <input type="text" formControlName="partName" /></label>
-          <label>Part Type <input type="text" formControlName="partType" /></label>
-          <label>Old Serial (optional) <input type="text" formControlName="oldPartSerial" /></label>
-          <label>New Serial (optional) <input type="text" formControlName="newPartSerial" /></label>
-          <label>
-            <input type="checkbox" formControlName="isOriginal" /> Original part (uncheck if replacement)
-          </label>
+          <label>Part name <input type="text" formControlName="partName" /></label>
+          <label>Part type <input type="text" formControlName="partType" /></label>
+          <label>Old serial (optional) <input type="text" formControlName="oldPartSerial" /></label>
+          <label>New serial (optional) <input type="text" formControlName="newPartSerial" /></label>
+          <label><input type="checkbox" formControlName="isOriginal" /> Original part (uncheck if replacement)</label>
           <label>Notes (optional) <textarea formControlName="notes" rows="2"></textarea></label>
 
           @if (partError()) { <p class="form-error">{{ partError() }}</p> }
@@ -51,7 +70,7 @@
           <div class="form-actions">
             <button type="button" (click)="showPartForm.set(false)">Cancel</button>
             <button type="submit" [disabled]="partForm.invalid || partSubmitting()">
-              {{ partSubmitting() ? 'Adding...' : 'Add Part' }}
+              {{ partSubmitting() ? 'Adding…' : 'Add part' }}
             </button>
           </div>
         </form>
@@ -61,10 +80,10 @@
         @if (submitSuccess()) {
           <p class="success-message">Repair submitted and verified.</p>
         } @else {
-          <p class="hint">Once submitted, this record and its parts become permanent and cannot be edited.</p>
+          <p class="hint">Once submitted, this record and its parts become permanent and can't be edited.</p>
           @if (submitError()) { <p class="form-error">{{ submitError() }}</p> }
           <button (click)="onSubmitRepair()" [disabled]="submitInProgress()">
-            {{ submitInProgress() ? 'Submitting...' : 'Submit Repair' }}
+            {{ submitInProgress() ? 'Submitting…' : 'Submit repair' }}
           </button>
         }
       </div>

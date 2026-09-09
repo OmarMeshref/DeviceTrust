@@ -1,0 +1,52 @@
+<!-- src/app/shared/trust-illustration/trust-illustration.html -->
+<div class="illus">
+  <svg viewBox="0 0 400 360" class="illus-svg" role="img"
+       aria-label="A device with a verified digital passport record">
+
+    <!-- scan frame -->
+    <g class="frame" stroke="#12958A" stroke-width="2" fill="none" stroke-linecap="round">
+      <path d="M24 60 V32 a8 8 0 0 1 8-8 h28" />
+      <path d="M376 60 V32 a8 8 0 0 0-8-8 h-28" />
+      <path d="M24 300 v28 a8 8 0 0 0 8 8 h28" />
+      <path d="M376 300 v28 a8 8 0 0 1-8 8 h-28" />
+    </g>
+
+    <!-- circuit traces feeding the device -->
+    <g class="traces" stroke="#0D7D74" stroke-width="1.8" fill="none" stroke-linecap="round">
+      <path d="M52 120 H96 V96 H140" />
+      <path d="M52 180 H120" />
+      <path d="M52 240 H96 V264 H140" />
+      <path d="M348 120 H304 V96 H260" />
+      <path d="M348 240 H304 V264 H260" />
+    </g>
+    <g class="nodes" fill="#12958A">
+      <circle cx="52" cy="120" r="4" /><circle cx="52" cy="180" r="4" />
+      <circle cx="52" cy="240" r="4" /><circle cx="348" cy="120" r="4" />
+      <circle cx="348" cy="240" r="4" />
+    </g>
+
+    <!-- the device -->
+    <rect class="device" x="140" y="86" width="120" height="150" rx="10"
+          fill="#0F172A" stroke="#1E293B" stroke-width="2" />
+    <rect x="152" y="98" width="96" height="66" rx="4" fill="#0B1220" />
+    <g class="specplate" fill="#334155">
+      <rect x="152" y="176" width="62" height="6" rx="3" />
+      <rect x="152" y="190" width="44" height="6" rx="3" />
+      <rect x="152" y="204" width="72" height="6" rx="3" />
+    </g>
+
+    <!-- passport record card -->
+    <g class="record">
+      <rect x="196" y="196" width="150" height="96" rx="10" fill="#F8FAFC"
+            stroke="#CBD5E1" stroke-width="1.5" />
+      <rect x="210" y="214" width="70" height="7" rx="3.5" fill="#0D7D74" />
+      <rect x="210" y="232" width="104" height="6" rx="3" fill="#CBD5E1" />
+      <rect x="210" y="246" width="84" height="6" rx="3" fill="#E2E8F0" />
+      <circle class="stamp" cx="312" cy="266" r="17" fill="#E3F4F2" />
+      <path class="check" d="M304 266 l6 6 l12 -13" stroke="#0A6259"
+            stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </svg>
+
+  <p class="illus-caption">{{ caption }}</p>
+</div>

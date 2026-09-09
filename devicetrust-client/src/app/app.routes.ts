@@ -18,21 +18,23 @@ import { UnauthorizedComponent } from './shared/unauthorized/unauthorized';
 import { NotFoundComponent } from './shared/not-found/not-found';
 import { RepairListComponent } from './features/repairs/repair-list/repair-list';
 import { ProfileComponent } from './features/profile/profile/profile';
+import { About } from './features/about/about';
+import { Contact } from './features/contact/contact';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
-  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard], data: { hideChrome: true } },
+  { path: 'register', component: RegisterComponent, canActivate: [guestGuard], data: { hideChrome: true } },  
   {
     path: 'owner/devices',
     component: DeviceListComponent,
     canActivate: [authGuard],
     data: { role: 'Owner' }
   },
-  { 
-    path: 'profile', 
-    component: ProfileComponent, 
-    canActivate: [authGuard] 
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'owner/devices/new',
@@ -91,12 +93,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: { role: 'Technician' }
   },
-  {
-    path: 'unauthorized', 
-    component: UnauthorizedComponent 
-  },
-  { 
-    path: '**', 
-    component: NotFoundComponent 
-  } 
+  { path: 'about', component: About },
+  { path: 'contact', component: Contact },
+  { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: '**', component: NotFoundComponent }
 ];

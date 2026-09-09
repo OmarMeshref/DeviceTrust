@@ -1,8 +1,9 @@
 <div class="page">
+  <span class="page-eyebrow">Owner</span>
   <h1>Welcome back</h1>
 
   @if (isLoading()) {
-    <p>Loading...</p>
+    <p>Loading…</p>
   } @else if (summary(); as s) {
     <div class="stats-grid">
       <a routerLink="/owner/devices" class="stat-card">

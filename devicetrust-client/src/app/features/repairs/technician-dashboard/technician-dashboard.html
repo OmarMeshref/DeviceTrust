@@ -1,11 +1,12 @@
 <div class="page">
-  <h1>Find a Device</h1>
-  <p class="hint">Enter the device's Public Passport ID (found on its QR sticker).</p>
+  <span class="page-eyebrow">Technician</span>
+  <h1>Find a device</h1>
+  <p class="static-lede">Enter the device's Public Passport ID, found on its QR sticker.</p>
 
   <form [formGroup]="form" (ngSubmit)="onSearch()">
     <input type="text" formControlName="publicId" placeholder="e.g. DVT-7F4VHQ" />
     <button type="submit" [disabled]="form.invalid || isSearching()">
-      {{ isSearching() ? 'Searching...' : 'Find Device' }}
+      {{ isSearching() ? 'Searching…' : 'Find device' }}
     </button>
   </form>
 
@@ -16,8 +17,10 @@
   @if (result(); as d) {
     <div class="lookup-result">
       <h3>{{ d.brand }} {{ d.model }}</h3>
-      <p>Passport ID: {{ d.publicPassportId }}</p>
-      <button (click)="onCreateRepair()">Create Repair Record</button>
+      <span class="device-card-id">{{ d.publicPassportId }}</span>
+      <div class="form-actions" style="margin-top: 1rem;">
+        <button (click)="onCreateRepair()">Create repair record</button>
+      </div>
     </div>
   }
 </div>

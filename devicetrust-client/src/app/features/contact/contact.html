@@ -1,0 +1,25 @@
+<div class="static-page">
+  <span class="page-eyebrow">Contact</span>
+  <h1>Questions about DeviceTrust?</h1>
+  <p class="static-lede">Send a message and it'll reach the project directly.</p>
+
+  @if (submitted()) {
+    <p class="success-message">Thanks — your message has been noted.</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label>
+        Name
+        <input type="text" formControlName="name" />
+      </label>
+      <label>
+        Email
+        <input type="email" formControlName="email" />
+      </label>
+      <label>
+        Message
+        <textarea formControlName="message" rows="5"></textarea>
+      </label>
+      <button type="submit" [disabled]="form.invalid">Send message</button>
+    </form>
+  }
+</div>
