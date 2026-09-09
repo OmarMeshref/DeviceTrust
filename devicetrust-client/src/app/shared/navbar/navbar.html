@@ -17,6 +17,7 @@
       @if (authService.getRole() === 'Admin') {
         <a routerLink="/admin/dashboard">Admin</a>
       }
+      <a routerLink="/profile">Profile</a>
       <span>{{ authService.getRole() }}</span>
       <button (click)="onLogout()">Logout</button>
     </div>

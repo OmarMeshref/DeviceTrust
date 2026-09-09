@@ -1,0 +1,22 @@
+<div class="page">
+  <h1>My Profile</h1>
+
+  @if (isLoading()) {
+    <p>Loading...</p>
+  } @else if (profile(); as p) {
+    <div class="profile-card">
+      <div class="profile-row">
+        <span class="label">Full Name</span>
+        <span class="value">{{ p.fullName }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Email</span>
+        <span class="value">{{ p.email }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Role</span>
+        <span class="status-badge status-verified">{{ p.role }}</span>
+      </div>
+    </div>
+  }
+</div>

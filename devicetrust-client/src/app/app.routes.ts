@@ -17,6 +17,7 @@ import { guestGuard } from './core/guards/guest.guard';
 import { UnauthorizedComponent } from './shared/unauthorized/unauthorized';
 import { NotFoundComponent } from './shared/not-found/not-found';
 import { RepairListComponent } from './features/repairs/repair-list/repair-list';
+import { ProfileComponent } from './features/profile/profile/profile';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -27,6 +28,11 @@ export const routes: Routes = [
     component: DeviceListComponent,
     canActivate: [authGuard],
     data: { role: 'Owner' }
+  },
+  { 
+    path: 'profile', 
+    component: ProfileComponent, 
+    canActivate: [authGuard] 
   },
   {
     path: 'owner/devices/new',
