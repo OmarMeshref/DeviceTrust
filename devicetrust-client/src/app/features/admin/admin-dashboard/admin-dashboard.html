@@ -1,10 +1,32 @@
 <div class="page-wide">
+  <p class="breadcrumb"><a routerLink="/admin/dashboard">Home</a> / Admin Dashboard</p>
+
   <span class="page-eyebrow">Admin</span>
   <h1>Admin dashboard</h1>
+  <p class="static-lede">Manage repair centre approvals and technician accreditation.</p>
 
   @if (isLoading()) {
     <p>Loading…</p>
   } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card-static">
+        <span class="stat-value">{{ centers().length }}</span>
+        <span class="stat-label">Repair Centres</span>
+      </div>
+      <div class="stat-card stat-card-static">
+        <span class="stat-value">{{ approvedCenters() }}</span>
+        <span class="stat-label">Approved Centres</span>
+      </div>
+      <div class="stat-card stat-card-static">
+        <span class="stat-value">{{ technicians().length }}</span>
+        <span class="stat-label">Technicians</span>
+      </div>
+      <div class="stat-card stat-card-static">
+        <span class="stat-value">{{ pendingTechnicians() }}</span>
+        <span class="stat-label">Pending Approval</span>
+      </div>
+    </div>
+
     @if (actionError()) {
       <p class="form-error">{{ actionError() }}</p>
     }

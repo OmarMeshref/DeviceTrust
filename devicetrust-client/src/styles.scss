@@ -1154,3 +1154,12 @@ select:focus-visible, textarea:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+.breadcrumb {
+  font-size: 0.8rem;
+  color: var(--steel-600);
+  margin-bottom: 1.25rem;
+
+  a { color: var(--steel-600); }
+  a:hover { color: var(--trust-600); }
+}

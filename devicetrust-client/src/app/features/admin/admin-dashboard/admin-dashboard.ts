@@ -1,5 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
 import { RepairCenter, Technician } from '../../../core/models/admin.models';
@@ -7,7 +8,7 @@ import { RepairCenter, Technician } from '../../../core/models/admin.models';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './admin-dashboard.html'
 })
 export class AdminDashboardComponent implements OnInit {
@@ -20,11 +21,14 @@ export class AdminDashboardComponent implements OnInit {
   centerSubmitting = signal(false);
   centerError = signal<string | null>(null);
 
-  // Tracks which technician row is currently choosing a center to link to,
-  // so only that row shows the center-picker dropdown instead of all rows at once.
   linkingTechnicianId = signal<number | null>(null);
   selectedCenterId = signal<number | null>(null);
   actionError = signal<string | null>(null);
+
+  approvedCenters = computed(() => this.centers().filter(c => c.isApproved).length);
+  pendingCenters = computed(() => this.centers().filter(c => !c.isApproved).length);
+  approvedTechnicians = computed(() => this.technicians().filter(t => t.isApproved).length);
+  pendingTechnicians = computed(() => this.technicians().filter(t => !t.isApproved).length);
 
   constructor(private adminService: AdminService, private fb: FormBuilder) {
     this.centerForm = this.fb.group({
