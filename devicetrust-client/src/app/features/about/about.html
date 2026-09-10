@@ -1,39 +1,42 @@
-<div class="static-page">
-  <span class="page-eyebrow">About</span>
-  <h1>A device's history shouldn't disappear with its owner.</h1>
-  <p class="static-lede">
-    DeviceTrust exists because buying a used laptop, phone, or tablet is still an act of
-    faith. A seller can say a device was never repaired. A buyer has no way to check.
-  </p>
-
-  <div class="static-section">
-    <h2>What it does</h2>
-    <p>
-      Every registered device gets a Passport ID and a QR code. When a technician
-      repairs the device, that record — once submitted — becomes permanent. It can't
-      be quietly edited or deleted, even by the technician who wrote it. Anyone who
-      scans the device later sees the same history, without needing an account.
+<section class="content-split">
+  <div class="content-copy">
+    <span class="page-eyebrow">About</span>
+    <h1>A device's history shouldn't disappear with its owner.</h1>
+    <p class="static-lede">
+      DeviceTrust exists because buying a used laptop, phone, or tablet is still an act
+      of faith. A seller can say a device was never repaired. A buyer has no way to check.
     </p>
+
+    <div class="static-section">
+      <h2>What it does</h2>
+      <p>
+        Every registered device gets a Passport ID and a QR code. When a technician
+        repairs the device, that record — once submitted — becomes permanent. It can't
+        be quietly edited or deleted, even by the technician who wrote it.
+      </p>
+    </div>
+
+    <div class="static-section">
+      <h2>Why it can be trusted</h2>
+      <p>
+        A repair only counts if it comes from a technician linked to an approved repair
+        centre, checked again at the moment it's submitted. Ownership changes work the
+        same way — closing one record and opening the next in a single step.
+      </p>
+    </div>
+
+    <div class="static-section">
+      <h2>Built by</h2>
+      <p>
+        A solo full-stack project for Orange Coding Academy — ASP.NET Core and SQL
+        Server on the back end, Angular on the front end.
+      </p>
+    </div>
+
+    <a routerLink="/register" class="btn-primary">Create an account</a>
   </div>
 
-  <div class="static-section">
-    <h2>Why it can be trusted</h2>
-    <p>
-      A repair only counts if it comes from a technician linked to an approved repair
-      centre, checked again at the moment it's submitted — not just when the paperwork
-      started. Ownership changes are tracked the same way: closing one record and
-      opening the next in a single step, so the history never has a gap.
-    </p>
+  <div class="content-visual">
+    <app-trust-illustration caption="A record that survives changes in ownership." />
   </div>
-
-  <div class="static-section">
-    <h2>Built by</h2>
-    <p>
-      A solo full-stack project for Orange Coding Academy — ASP.NET Core and SQL Server
-      on the back end, Angular on the front end, designed and built end to end by one
-      developer.
-    </p>
-  </div>
-
-  <a routerLink="/register" class="btn-primary">Create an account</a>
-</div>
+</section>
