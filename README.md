@@ -42,7 +42,20 @@ Think of it as a Carfax for electronics, or a medical record that follows the de
 
 ## Screenshots
 
-*(Add current screenshots here — landing page, public passport, owner dashboard, admin dashboard. See `docs/screenshots/`.)*
+**Landing page** — problem statement, live passport lookup, and a walkthrough of how the system works.
+![Landing page](docs/screenshots/landing.png)
+
+**Login** — split layout with an animated illustration; the same pattern mirrors on Register.
+![Login](docs/screenshots/login.png)
+
+**Owner Dashboard** — live stats, recently registered devices, and quick actions.
+![Owner dashboard](docs/screenshots/owner-home.png)
+
+**Admin Dashboard** — repair centre and technician approval, with computed stats.
+![Admin dashboard](docs/screenshots/admin.png)
+
+**Technician — Find a Device** — looking up a device by its Public Passport ID before logging a repair.
+![Technician dashboard](docs/screenshots/technician.png)
 
 ## What DeviceTrust Is Not
 
