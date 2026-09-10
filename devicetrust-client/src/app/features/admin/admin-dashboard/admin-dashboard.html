@@ -1,6 +1,6 @@
+<!-- src/app/features/admin/admin-dashboard/admin-dashboard.html -->
 <div class="page-wide">
-  <p class="breadcrumb"><a routerLink="/admin/dashboard">Home</a> / Admin Dashboard</p>
-
+  <p class="breadcrumb">Admin home</p>
   <span class="page-eyebrow">Admin</span>
   <h1>Admin dashboard</h1>
   <p class="static-lede">Manage repair centre approvals and technician accreditation.</p>
@@ -9,129 +9,79 @@
     <p>Loading…</p>
   } @else {
     <div class="stats-grid">
-      <div class="stat-card stat-card-static">
-        <span class="stat-value">{{ centers().length }}</span>
-        <span class="stat-label">Repair Centres</span>
-      </div>
-      <div class="stat-card stat-card-static">
-        <span class="stat-value">{{ approvedCenters() }}</span>
-        <span class="stat-label">Approved Centres</span>
-      </div>
-      <div class="stat-card stat-card-static">
-        <span class="stat-value">{{ technicians().length }}</span>
-        <span class="stat-label">Technicians</span>
-      </div>
-      <div class="stat-card stat-card-static">
-        <span class="stat-value">{{ pendingTechnicians() }}</span>
-        <span class="stat-label">Pending Approval</span>
-      </div>
+      <div class="stat-card stat-card-static"><span class="stat-value">{{ centers().length }}</span><span class="stat-label">Repair Centres</span></div>
+      <div class="stat-card stat-card-static"><span class="stat-value">{{ approvedCenters() }}</span><span class="stat-label">Approved Centres</span></div>
+      <div class="stat-card stat-card-static"><span class="stat-value">{{ technicians().length }}</span><span class="stat-label">Technicians</span></div>
+      <div class="stat-card stat-card-static"><span class="stat-value">{{ pendingTechnicians() }}</span><span class="stat-label">Pending Approval</span></div>
     </div>
 
-    @if (actionError()) {
-      <p class="form-error">{{ actionError() }}</p>
+    @if (actionError()) { <p class="form-error">{{ actionError() }}</p> }
+
+    <div class="page-header">
+      <h2 class="section-title" style="margin:0;">Repair centres</h2>
+      @if (!showCenterForm()) { <button (click)="showCenterForm.set(true)">+ New repair centre</button> }
+    </div>
+
+    @if (showCenterForm()) {
+      <form [formGroup]="centerForm" (ngSubmit)="onCreateCenter()">
+        <label>Name <input type="text" formControlName="name" /></label>
+        <label>Address <input type="text" formControlName="address" /></label>
+        @if (centerError()) { <p class="form-error">{{ centerError() }}</p> }
+        <div class="form-actions">
+          <button type="button" (click)="showCenterForm.set(false)">Cancel</button>
+          <button type="submit" [disabled]="centerForm.invalid || centerSubmitting()">{{ centerSubmitting() ? 'Creating…' : 'Create' }}</button>
+        </div>
+      </form>
     }
 
-    <section>
-      <div class="page-header">
-        <h2 class="section-title" style="margin-top:0;">Repair centres</h2>
-        @if (!showCenterForm()) {
-          <button (click)="showCenterForm.set(true)">+ New repair centre</button>
-        }
-      </div>
+    @if (centers().length === 0) {
+      <p>No repair centres yet.</p>
+    } @else {
+      <table>
+        <thead><tr><th>Name</th><th>Address</th><th>Technicians</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          @for (c of centers(); track c.id) {
+            <tr>
+              <td>{{ c.name }}</td><td>{{ c.address }}</td><td>{{ c.technicianCount }}</td>
+              <td><span class="status-badge" [class.status-verified]="c.isApproved" [class.status-draft]="!c.isApproved">{{ c.isApproved ? 'Approved' : 'Pending' }}</span></td>
+              <td>@if (!c.isApproved) { <button (click)="onApproveCenter(c.id)">Approve</button> }</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
 
-      @if (showCenterForm()) {
-        <form [formGroup]="centerForm" (ngSubmit)="onCreateCenter()">
-          <label>Name <input type="text" formControlName="name" /></label>
-          <label>Address <input type="text" formControlName="address" /></label>
-          @if (centerError()) { <p class="form-error">{{ centerError() }}</p> }
-          <div class="form-actions">
-            <button type="button" (click)="showCenterForm.set(false)">Cancel</button>
-            <button type="submit" [disabled]="centerForm.invalid || centerSubmitting()">
-              {{ centerSubmitting() ? 'Creating…' : 'Create' }}
-            </button>
-          </div>
-        </form>
-      }
-
-      @if (centers().length === 0) {
-        <p>No repair centres yet.</p>
-      } @else {
-        <table>
-          <thead>
-            <tr><th>Name</th><th>Address</th><th>Technicians</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody>
-            @for (c of centers(); track c.id) {
-              <tr>
-                <td>{{ c.name }}</td>
-                <td>{{ c.address }}</td>
-                <td>{{ c.technicianCount }}</td>
-                <td>
-                  <span class="status-badge" [class.status-verified]="c.isApproved" [class.status-draft]="!c.isApproved">
-                    {{ c.isApproved ? 'Approved' : 'Pending' }}
-                  </span>
-                </td>
-                <td>
-                  @if (!c.isApproved) {
-                    <button (click)="onApproveCenter(c.id)">Approve</button>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </section>
-
-    <section>
-      <h2 class="section-title">Technicians</h2>
-
-      @if (technicians().length === 0) {
-        <p>No technicians registered yet.</p>
-      } @else {
-        <table>
-          <thead>
-            <tr><th>Name</th><th>Email</th><th>Repair centre</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody>
-            @for (t of technicians(); track t.id) {
-              <tr>
-                <td>{{ t.fullName }}</td>
-                <td>{{ t.email }}</td>
-                <td>{{ t.repairCenterName || '—' }}</td>
-                <td>
-                  <span class="status-badge" [class.status-verified]="t.isApproved" [class.status-draft]="!t.isApproved">
-                    {{ t.isApproved ? 'Approved' : 'Pending' }}
-                  </span>
-                </td>
-                <td>
-                  @if (linkingTechnicianId() === t.id) {
-                    <div class="link-picker">
-                      <select (change)="selectedCenterId.set($any($event.target).value)">
-                        <option [value]="null" disabled selected>Select centre…</option>
-                        @for (c of centers(); track c.id) {
-                          <option [value]="c.id">{{ c.name }}</option>
-                        }
-                      </select>
-                      <button (click)="onConfirmLink(t.id)">Confirm</button>
-                      <button type="button" (click)="linkingTechnicianId.set(null)">Cancel</button>
-                    </div>
-                  } @else {
-                    @if (!t.repairCenterId) {
-                      <button (click)="onStartLink(t.id)">Link to centre</button>
-                    } @else {
-                      <button (click)="onUnlinkTechnician(t.id)">Unlink</button>
-                    }
-                    @if (t.repairCenterId && !t.isApproved) {
-                      <button (click)="onApproveTechnician(t.id)">Approve</button>
-                    }
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </section>
+    <h2 class="section-title">Technicians</h2>
+    @if (technicians().length === 0) {
+      <p>No technicians registered yet.</p>
+    } @else {
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Repair centre</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          @for (t of technicians(); track t.id) {
+            <tr>
+              <td>{{ t.fullName }}</td><td>{{ t.email }}</td><td>{{ t.repairCenterName || '—' }}</td>
+              <td><span class="status-badge" [class.status-verified]="t.isApproved" [class.status-draft]="!t.isApproved">{{ t.isApproved ? 'Approved' : 'Pending' }}</span></td>
+              <td>
+                @if (linkingTechnicianId() === t.id) {
+                  <div class="link-picker">
+                    <select (change)="selectedCenterId.set($any($event.target).value)">
+                      <option [value]="null" disabled selected>Select centre…</option>
+                      @for (c of centers(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+                    </select>
+                    <button (click)="onConfirmLink(t.id)">Confirm</button>
+                    <button type="button" (click)="linkingTechnicianId.set(null)">Cancel</button>
+                  </div>
+                } @else {
+                  @if (!t.repairCenterId) { <button (click)="onStartLink(t.id)">Link to centre</button> }
+                  @else { <button (click)="onUnlinkTechnician(t.id)">Unlink</button> }
+                  @if (t.repairCenterId && !t.isApproved) { <button (click)="onApproveTechnician(t.id)">Approve</button> }
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   }
 </div>

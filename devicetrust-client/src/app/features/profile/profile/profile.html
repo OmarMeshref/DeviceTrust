@@ -1,4 +1,5 @@
 <div class="page">
+  <p class="breadcrumb">Home</p>
   <span class="page-eyebrow">Account</span>
   <h1>My profile</h1>
 
@@ -6,18 +7,9 @@
     <p>Loading…</p>
   } @else if (profile(); as p) {
     <div class="spec-plate">
-      <div class="spec-row">
-        <span class="spec-label">Full name</span>
-        <span class="spec-value">{{ p.fullName }}</span>
-      </div>
-      <div class="spec-row">
-        <span class="spec-label">Email</span>
-        <span class="spec-value">{{ p.email }}</span>
-      </div>
-      <div class="spec-row">
-        <span class="spec-label">Role</span>
-        <span class="status-badge status-verified">{{ p.role }}</span>
-      </div>
+      <div class="spec-row"><span class="spec-label">Full name</span><span class="spec-value-text">{{ p.fullName }}</span></div>
+      <div class="spec-row"><span class="spec-label">Email</span><span class="spec-value-text">{{ p.email }}</span></div>
+      <div class="spec-row"><span class="spec-label">Role</span><span class="status-badge status-verified">{{ p.role }}</span></div>
     </div>
   }
 </div>

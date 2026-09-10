@@ -1,4 +1,5 @@
-<div class="page">
+<div class="page-wide">
+  <p class="breadcrumb">Home</p>
   <span class="page-eyebrow">Owner</span>
   <h1>Welcome back</h1>
 
@@ -27,6 +28,40 @@
     <div class="quick-actions">
       <a routerLink="/owner/devices/new" class="btn-primary">+ Register a New Device</a>
       <a routerLink="/owner/devices">View All Devices &rarr;</a>
+    </div>
+
+    <h2 class="section-title">Recently registered</h2>
+    @if (recentDevices().length === 0) {
+      <div class="empty-state">
+        <p>You haven't registered a device yet.</p>
+        <a routerLink="/owner/devices/new" class="btn-primary">Register your first device</a>
+      </div>
+    } @else {
+      <div class="device-grid">
+        @for (device of recentDevices(); track device.id) {
+          <a [routerLink]="['/owner/devices', device.id]" class="device-card">
+            <h3>{{ device.brand }} {{ device.model }}</h3>
+            <span class="device-card-id">{{ device.publicPassportId }}</span>
+            <span class="device-card-date">Registered {{ device.registeredAt | date }}</span>
+          </a>
+        }
+      </div>
+    }
+
+    <h2 class="section-title">Quick actions</h2>
+    <div class="audience-grid">
+      <a routerLink="/owner/devices/new" class="audience-card">
+        <h3>Register a device</h3>
+        <p>Add a new device and generate its Passport ID and QR code.</p>
+      </a>
+      <a routerLink="/transfers/pending" class="audience-card">
+        <h3>Manage transfers</h3>
+        <p>Review incoming requests or check the status of transfers you've sent.</p>
+      </a>
+      <a routerLink="/owner/devices" class="audience-card">
+        <h3>View repair history</h3>
+        <p>Open any device to see its full verified repair timeline.</p>
+      </a>
     </div>
   }
 </div>

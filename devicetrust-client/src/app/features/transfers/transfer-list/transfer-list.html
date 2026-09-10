@@ -1,4 +1,5 @@
 <div class="page-wide">
+  <p class="breadcrumb">Home</p>
   <span class="page-eyebrow">Owner</span>
   <h1>Transfers</h1>
 
@@ -8,38 +9,39 @@
   </div>
 
   @if (isLoading()) {
-    <p>Loading...</p>
+    <p>Loading…</p>
   } @else if (errorMessage()) {
     <p class="error">{{ errorMessage() }}</p>
   } @else if (transfers().length === 0) {
-    <p>
-      {{ activeTab() === 'pending' ? 'You have no pending transfer requests.' : 'No past transfers yet.' }}
-    </p>
+    <div class="empty-state">
+      <p>{{ activeTab() === 'pending' ? 'You have no pending transfer requests.' : 'No past transfers yet.' }}</p>
+    </div>
   } @else {
-    @for (t of transfers(); track t.id) {
-      <div class="transfer-card">
-        <h3>{{ t.deviceBrand }} {{ t.deviceModel }}</h3>
-        <p>Passport ID: {{ t.devicePublicPassportId }}</p>
-        <p>Your role: {{ t.callerRole }}</p>
+    <div class="device-grid">
+      @for (t of transfers(); track t.id) {
+        <div class="transfer-card">
+          <h3>{{ t.deviceBrand }} {{ t.deviceModel }}</h3>
+          <span class="device-card-id">{{ t.devicePublicPassportId }}</span>
+          <p style="margin-top:0.5rem;">Your role: {{ t.callerRole }}</p>
 
-        @if (activeTab() === 'pending') {
-          <p>Requested: {{ t.createdAt | date }}</p>
-          <p>Expires: {{ t.expiresAt | date }}</p>
-          <div class="transfer-actions">
-            <button (click)="onAccept(t.id)" [disabled]="actioningId() === t.id">Accept</button>
-            <button (click)="onReject(t.id)" [disabled]="actioningId() === t.id">Reject</button>
-          </div>
-        } @else {
-          <span class="status-badge"
-                [class.status-verified]="t.status === TransferStatus.Accepted"
-                [class.status-draft]="t.status === TransferStatus.Pending">
-            {{ t.status === TransferStatus.Accepted ? 'Accepted' :
-               t.status === TransferStatus.Rejected ? 'Rejected' :
-               t.status === TransferStatus.Cancelled ? 'Cancelled' : 'Expired' }}
-          </span>
-          <p>{{ t.respondedAt ? (t.respondedAt | date) : (t.createdAt | date) }}</p>
-        }
-      </div>
-    }
+          @if (activeTab() === 'pending') {
+            <p class="hint" style="margin:0;">Requested {{ t.createdAt | date }} · Expires {{ t.expiresAt | date }}</p>
+            <div class="transfer-actions">
+              <button (click)="onAccept(t.id)" [disabled]="actioningId() === t.id">Accept</button>
+              <button (click)="onReject(t.id)" [disabled]="actioningId() === t.id">Reject</button>
+            </div>
+          } @else {
+            <span class="status-badge"
+                  [class.status-verified]="t.status === TransferStatus.Accepted"
+                  [class.status-draft]="t.status === TransferStatus.Pending">
+              {{ t.status === TransferStatus.Accepted ? 'Accepted' :
+                 t.status === TransferStatus.Rejected ? 'Rejected' :
+                 t.status === TransferStatus.Cancelled ? 'Cancelled' : 'Expired' }}
+            </span>
+            <p class="hint">{{ t.respondedAt ? (t.respondedAt | date) : (t.createdAt | date) }}</p>
+          }
+        </div>
+      }
+    </div>
   }
 </div>

@@ -7,57 +7,48 @@
       <p>No device is registered under this passport ID.</p>
     </div>
   } @else if (passport(); as p) {
-    <div class="passport-card">
-      <div class="passport-header">
-        <span class="passport-badge">DeviceTrust Verified Passport</span>
-        <h1>{{ p.brand }} {{ p.model }}</h1>
-        <p class="device-type">{{ typeLabel(p.type) }}</p>
-      </div>
-
-      <div class="passport-id-block">
-        <span class="label">Passport ID</span>
-        <span class="value">{{ p.publicPassportId }}</span>
-      </div>
-
-      <div class="passport-facts">
-        <div class="fact">
-          <span class="label">Serial Number</span>
-          <span class="value">{{ p.maskedSerialNumber }}</span>
+    <div class="passport-shell">
+      <div class="passport-card">
+        <div class="passport-header">
+          <span class="passport-badge">DeviceTrust Verified Passport</span>
+          <h1>{{ p.brand }} {{ p.model }}</h1>
+          <p class="device-type">{{ typeLabel(p.type) }}</p>
         </div>
-        <div class="fact">
-          <span class="label">Registered</span>
-          <span class="value">{{ p.registeredAt | date }}</span>
+
+        <div class="passport-id-block">
+          <span class="label">Passport ID</span>
+          <span class="value">{{ p.publicPassportId }}</span>
+        </div>
+
+        <div class="passport-facts">
+          <div class="fact"><span class="label">Serial Number</span><span class="value">{{ p.maskedSerialNumber }}</span></div>
+          <div class="fact"><span class="label">Registered</span><span class="value">{{ p.registeredAt | date }}</span></div>
+        </div>
+
+        <div class="trust-panel" [class]="'trust-' + trustStatus(p)">
+          @switch (trustStatus(p)) {
+            @case ('none') { <p>No repairs have been logged for this device yet.</p> }
+            @case ('clean') { <p><strong>{{ p.verifiedRepairCount }}</strong> repair(s) logged, all verified.</p> }
+            @case ('partial') { <p><strong>{{ p.verifiedRepairCount }}</strong> of <strong>{{ p.totalRepairCount }}</strong> logged repairs are verified.</p> }
+          }
         </div>
       </div>
 
-      <div class="trust-panel" [class]="'trust-' + trustStatus(p)">
-        @switch (trustStatus(p)) {
-          @case ('none') {
-            <p>No repairs have been logged for this device yet.</p>
-          }
-          @case ('clean') {
-            <p><strong>{{ p.verifiedRepairCount }}</strong> repair(s) logged, all verified.</p>
-          }
-          @case ('partial') {
-            <p>
-              <strong>{{ p.verifiedRepairCount }}</strong> of <strong>{{ p.totalRepairCount }}</strong>
-              logged repairs are verified.
-            </p>
-          }
+      <div class="passport-side">
+        <h2>Repair History</h2>
+        @if (p.repairTimeline.length === 0) {
+          <p class="passport-empty">No repairs logged yet.</p>
+        } @else {
+          <div class="timeline">
+            @for (item of p.repairTimeline; track item.repairDate) {
+              <div class="timeline-item">
+                <span class="timeline-date">{{ item.repairDate | date }}</span>
+                <span class="timeline-action">{{ item.actionTaken }}</span>
+              </div>
+            }
+          </div>
         }
       </div>
-
-      @if (p.repairTimeline.length > 0) {
-        <div class="timeline">
-          <h2>Repair History</h2>
-          @for (item of p.repairTimeline; track item.repairDate) {
-            <div class="timeline-item">
-              <span class="timeline-date">{{ item.repairDate | date }}</span>
-              <span class="timeline-action">{{ item.actionTaken }}</span>
-            </div>
-          }
-        </div>
-      }
     </div>
   }
 </div>

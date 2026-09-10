@@ -1,97 +1,104 @@
-<!-- src/app/features/devices/device-detail/device-detail.html -->
-<div class="page">
+<div class="page-wide">
   @if (isLoading()) {
     <p>Loading device…</p>
   } @else if (notFound()) {
     <p>Device not found.</p>
     <a routerLink="/owner/devices">Back to my devices</a>
   } @else if (device(); as d) {
-    <a routerLink="/owner/devices" class="back-link">&larr; My devices</a>
+    <p class="breadcrumb"><a routerLink="/owner/devices">My devices</a> / {{ d.brand }} {{ d.model }}</p>
     <h1>{{ d.brand }} {{ d.model }}</h1>
 
-    <div class="spec-plate">
-      <div class="spec-row">
-        <span class="spec-label">Passport ID</span>
-        <span class="spec-value">{{ d.publicPassportId }}</span>
-      </div>
-      <div class="spec-row">
-        <span class="spec-label">Serial number</span>
-        <span class="spec-value">{{ d.serialNumber }}</span>
-      </div>
-      <div class="spec-row">
-        <span class="spec-label">Registered</span>
-        <span class="spec-value">{{ d.registeredAt | date }}</span>
-      </div>
-      @if (d.purchaseDate) {
-        <div class="spec-row">
-          <span class="spec-label">Purchase date</span>
-          <span class="spec-value">{{ d.purchaseDate | date }}</span>
-        </div>
-      }
-      <div class="spec-row">
-        <span class="spec-label">Repairs logged</span>
-        <span class="spec-value">{{ d.repairCount }}</span>
-      </div>
-    </div>
-
-    <a [routerLink]="['/passport', d.publicPassportId]" target="_blank" class="passport-link">
-      View public passport &rarr;
-    </a>
-
-    <h2 class="section-title">Ownership history</h2>
-    <div class="spec-plate">
-      @for (period of d.ownershipHistory; track period.startDate) {
-        <div class="spec-row">
-          <span class="spec-label">
-            {{ period.startDate | date }} &rarr; {{ period.isCurrent ? 'Present' : (period.endDate | date) }}
-          </span>
-          @if (period.isCurrent) {
-            <span class="status-badge status-verified">Current</span>
-          }
-        </div>
-      }
-    </div>
-
-    <h2 class="section-title">Device QR code</h2>
-    <div class="qr-section">
-      <p class="hint">
-        Print this and attach it to the physical device — not the screen — so it
-        stays scannable even if the display is damaged.
-      </p>
-      @if (qrDataUrl(); as qr) {
-        <img [src]="qr" alt="QR code linking to this device's public passport" width="180" height="180" />
-        <button (click)="downloadQr()">Download QR code</button>
-      } @else {
-        <p>Generating QR code…</p>
-      }
-    </div>
-
-    <h2 class="section-title">Ownership transfer</h2>
-    <div class="transfer-section">
-      @if (transferSuccess()) {
-        <p class="success-message">{{ transferSuccess() }}</p>
-      } @else if (!showTransferForm()) {
-        <button (click)="showTransferForm.set(true)">Transfer ownership</button>
-      } @else {
-        <form [formGroup]="transferForm" (ngSubmit)="onStartTransfer()">
-          <label>
-            Buyer's email
-            <input type="email" formControlName="buyerEmail" placeholder="buyer@example.com" />
-          </label>
-          <p class="hint">The buyer must already have a DeviceTrust account.</p>
-
-          @if (transferError()) {
-            <p class="form-error">{{ transferError() }}</p>
-          }
-
-          <div class="form-actions">
-            <button type="button" (click)="showTransferForm.set(false)">Cancel</button>
-            <button type="submit" [disabled]="transferForm.invalid || transferSubmitting()">
-              {{ transferSubmitting() ? 'Sending…' : 'Send transfer request' }}
-            </button>
+    <div class="detail-layout">
+      <div class="detail-main">
+        <div class="spec-plate">
+          <div class="spec-row">
+            <span class="spec-label">Passport ID</span>
+            <span class="spec-value">{{ d.publicPassportId }}</span>
           </div>
-        </form>
-      }
+          <div class="spec-row">
+            <span class="spec-label">Serial number</span>
+            <span class="spec-value">{{ d.serialNumber }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Registered</span>
+            <span class="spec-value-text">{{ d.registeredAt | date }}</span>
+          </div>
+          @if (d.purchaseDate) {
+            <div class="spec-row">
+              <span class="spec-label">Purchase date</span>
+              <span class="spec-value-text">{{ d.purchaseDate | date }}</span>
+            </div>
+          }
+          <div class="spec-row">
+            <span class="spec-label">Repairs logged</span>
+            <span class="spec-value-text">{{ d.repairCount }}</span>
+          </div>
+        </div>
+
+        <a [routerLink]="['/passport', d.publicPassportId]" target="_blank" class="back-link" style="display:block; margin-top:1rem;">
+          View public passport &rarr;
+        </a>
+
+        <h2 class="section-title">Ownership history</h2>
+        <div class="spec-plate">
+          @for (period of d.ownershipHistory; track period.startDate) {
+            <div class="ownership-row">
+              <span class="ownership-dates">
+                {{ period.startDate | date }} &rarr; {{ period.isCurrent ? 'Present' : (period.endDate | date) }}
+              </span>
+              @if (period.isCurrent) {
+                <span class="status-badge status-verified">Current</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="detail-side">
+        <div class="side-panel">
+          <h2>Device QR code</h2>
+          <p class="hint" style="margin-bottom:0.85rem;">
+            Print and attach to the physical device — not the screen — so it stays
+            scannable even if the display is damaged.
+          </p>
+          @if (qrDataUrl(); as qr) {
+            <div class="qr-display">
+              <img [src]="qr" alt="QR code linking to this device's public passport" width="180" height="180" />
+              <button (click)="downloadQr()">Download QR code</button>
+            </div>
+          } @else {
+            <p>Generating…</p>
+          }
+        </div>
+
+        <div class="side-panel">
+          <h2>Ownership transfer</h2>
+          @if (transferSuccess()) {
+            <p class="success-message">{{ transferSuccess() }}</p>
+          } @else if (!showTransferForm()) {
+            <button (click)="showTransferForm.set(true)">Transfer ownership</button>
+          } @else {
+            <form [formGroup]="transferForm" (ngSubmit)="onStartTransfer()">
+              <label>
+                Buyer's email
+                <input type="email" formControlName="buyerEmail" placeholder="buyer@example.com" />
+              </label>
+              <p class="hint">The buyer must already have a DeviceTrust account.</p>
+
+              @if (transferError()) {
+                <p class="form-error">{{ transferError() }}</p>
+              }
+
+              <div class="form-actions">
+                <button type="button" (click)="showTransferForm.set(false)">Cancel</button>
+                <button type="submit" [disabled]="transferForm.invalid || transferSubmitting()">
+                  {{ transferSubmitting() ? 'Sending…' : 'Send request' }}
+                </button>
+              </div>
+            </form>
+          }
+        </div>
+      </div>
     </div>
   }
 </div>

@@ -8,18 +8,9 @@
       <p class="success-message">Thanks — your message has been noted.</p>
     } @else {
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <label>
-          Name
-          <input type="text" formControlName="name" />
-        </label>
-        <label>
-          Email
-          <input type="email" formControlName="email" />
-        </label>
-        <label>
-          Message
-          <textarea formControlName="message" rows="5"></textarea>
-        </label>
+        <label>Name <input type="text" formControlName="name" /></label>
+        <label>Email <input type="email" formControlName="email" /></label>
+        <label>Message <textarea formControlName="message" rows="5"></textarea></label>
         <button type="submit" [disabled]="form.invalid">Send message</button>
       </form>
     }

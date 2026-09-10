@@ -1,24 +1,31 @@
-<div class="page">
+<div class="page-wide">
+  <p class="breadcrumb">Home</p>
   <div class="page-header">
-    <h1>My Repairs</h1>
-    <a routerLink="/technician/dashboard" class="btn-primary">+ Find a Device</a>
+    <div>
+      <span class="page-eyebrow">Technician</span>
+      <h1>My repairs</h1>
+    </div>
+    <a routerLink="/technician/dashboard" class="btn-primary">+ Find a device</a>
   </div>
 
   @if (isLoading()) {
-    <p>Loading...</p>
+    <p>Loading…</p>
   } @else if (repairs().length === 0) {
-    <p>You haven't logged any repairs yet.</p>
+    <div class="empty-state">
+      <p>You haven't logged any repairs yet.</p>
+    </div>
   } @else {
-    @for (r of repairs(); track r.id) {
-      <a [routerLink]="['/technician/repairs', r.id]" class="device-card">
-        <h3>{{ r.deviceBrand }} {{ r.deviceModel }}</h3>
-        <p>{{ r.devicePublicPassportId }}</p>
-        <span class="status-badge" [class.status-draft]="r.status === RepairStatus.Draft"
-                                   [class.status-verified]="r.status === RepairStatus.Verified">
-          {{ r.status === RepairStatus.Draft ? 'Draft' : 'Verified' }}
-        </span>
-        <p>{{ r.repairDate | date }}</p>
-      </a>
-    }
+    <div class="device-grid">
+      @for (r of repairs(); track r.id) {
+        <a [routerLink]="['/technician/repairs', r.id]" class="device-card">
+          <h3>{{ r.deviceBrand }} {{ r.deviceModel }}</h3>
+          <span class="device-card-id">{{ r.devicePublicPassportId }}</span>
+          <span class="status-badge" [class.status-draft]="r.status === RepairStatus.Draft" [class.status-verified]="r.status === RepairStatus.Verified">
+            {{ r.status === RepairStatus.Draft ? 'Draft' : 'Verified' }}
+          </span>
+          <span class="device-card-date">{{ r.repairDate | date }}</span>
+        </a>
+      }
+    </div>
   }
 </div>

@@ -1,5 +1,7 @@
 <div class="page">
-  <h1>Register a Device</h1>
+  <p class="breadcrumb"><a routerLink="/owner/devices">My devices</a> / Register device</p>
+  <span class="page-eyebrow">Owner</span>
+  <h1>Register a device</h1>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label>
@@ -11,34 +13,19 @@
       </select>
     </label>
 
-    <label>
-      Brand
-      <input type="text" formControlName="brand" placeholder="e.g. Lenovo" />
-    </label>
-
-    <label>
-      Model
-      <input type="text" formControlName="model" placeholder="e.g. Legion 5" />
-    </label>
-
-    <label>
-      Serial Number
-      <input type="text" formControlName="serialNumber" />
-    </label>
-
-    <label>
-      Purchase Date (optional)
-      <input type="date" formControlName="purchaseDate" />
-    </label>
+    <label>Brand <input type="text" formControlName="brand" placeholder="e.g. Lenovo" /></label>
+    <label>Model <input type="text" formControlName="model" placeholder="e.g. Legion 5" /></label>
+    <label>Serial Number <input type="text" formControlName="serialNumber" /></label>
+    <label>Purchase Date (optional) <input type="date" formControlName="purchaseDate" /></label>
 
     @if (errorMessage()) {
       <p class="form-error">{{ errorMessage() }}</p>
     }
 
     <div class="form-actions">
-      <a routerLink="/owner/devices">Cancel</a>
+      <a routerLink="/owner/devices" class="btn-secondary" style="padding:0.65rem 1.1rem; border-radius:6px; text-decoration:none;">Cancel</a>
       <button type="submit" [disabled]="form.invalid || isSubmitting()">
-        {{ isSubmitting() ? 'Registering...' : 'Register Device' }}
+        {{ isSubmitting() ? 'Registering…' : 'Register device' }}
       </button>
     </div>
   </form>
