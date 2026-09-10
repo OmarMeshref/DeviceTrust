@@ -27,8 +27,7 @@
 
   <Target Name="BuildAngular" BeforeTargets="Publish">
     <Exec Command="npm install" WorkingDirectory="../../devicetrust-client" />
-    <Exec Command="npm run build -- --configuration production" WorkingDirectory="../../devicetrust-client" />
-    <ItemGroup>
+    <Exec Command="npx ng build --configuration production" WorkingDirectory="../../devicetrust-client" />    <ItemGroup>
       <AngularDist Include="../../devicetrust-client/dist/devicetrust-client/browser/**/*" />
     </ItemGroup>
     <Copy SourceFiles="@(AngularDist)" DestinationFolder="wwwroot/%(RecursiveDir)" SkipUnchangedFiles="true" />

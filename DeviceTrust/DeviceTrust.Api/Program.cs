@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://YOUR-MONSTERASP-DOMAIN.com")
+        policy.WithOrigins("http://localhost:4200", "https://devicetrust.runasp.net")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
