@@ -1,20 +1,21 @@
 <div class="page">
-  <h1>My Profile</h1>
+  <span class="page-eyebrow">Account</span>
+  <h1>My profile</h1>
 
   @if (isLoading()) {
-    <p>Loading...</p>
+    <p>Loading…</p>
   } @else if (profile(); as p) {
-    <div class="profile-card">
-      <div class="profile-row">
-        <span class="label">Full Name</span>
-        <span class="value">{{ p.fullName }}</span>
+    <div class="spec-plate">
+      <div class="spec-row">
+        <span class="spec-label">Full name</span>
+        <span class="spec-value">{{ p.fullName }}</span>
       </div>
-      <div class="profile-row">
-        <span class="label">Email</span>
-        <span class="value">{{ p.email }}</span>
+      <div class="spec-row">
+        <span class="spec-label">Email</span>
+        <span class="spec-value">{{ p.email }}</span>
       </div>
-      <div class="profile-row">
-        <span class="label">Role</span>
+      <div class="spec-row">
+        <span class="spec-label">Role</span>
         <span class="status-badge status-verified">{{ p.role }}</span>
       </div>
     </div>

@@ -1081,3 +1081,10 @@ select:focus-visible, textarea:focus-visible {
 
   p { margin-bottom: 1.25rem; }
 }
+
+// styles.scss — add near .page
+.page-wide {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
